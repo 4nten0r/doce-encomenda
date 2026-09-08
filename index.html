@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Doce Encomenda | Alta Confeitaria & Pâtisserie</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Fontes de Alta Confeitaria (Playfair Display para títulos + Plus Jakarta Sans para interface) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark: '#0e0514',
+              deep: '#160820',
+              surface: 'rgba(32, 13, 43, 0.72)',
+              card: 'rgba(46, 18, 60, 0.65)',
+              border: 'rgba(243, 186, 98, 0.18)',
+              borderHover: 'rgba(243, 186, 98, 0.45)',
+              gold: '#F3BA62',
+              goldLight: '#FDE4B0',
+              goldHover: '#E5A642',
+              rose: '#F472B6',
+              berry: '#E11D48',
+              cream: '#FFF8F0',
+              muted: '#B8A4BD',
+              success: '#10B981'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+          },
+          boxShadow: {
+            'glow-gold': '0 0 25px -5px rgba(243, 186, 98, 0.3)',
+            'glow-rose': '0 0 25px -5px rgba(244, 114, 182, 0.25)',
+            'glass': '0 12px 36px 0 rgba(0, 0, 0, 0.45)',
+            'ticket': '0 20px 40px -10px rgba(0, 0, 0, 0.6)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+
+    body {
+      background-color: #0e0514;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(225, 29, 72, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 85% 25%, rgba(243, 186, 98, 0.14) 0%, transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(180deg, #13061c 0%, #0a030f 100%);
+      background-size: auto, auto, auto, 34px 34px, auto;
+      background-attachment: fixed;
+      color: #FFF8F0;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(115deg, rgba(255, 255, 255, 0.025), transparent 32%, rgba(243, 186, 98, 0.025));
+      z-index: -1;
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Efeito Glassmorphism Sofisticado */
+    .glass-panel {
+      background: rgba(36, 14, 48, 0.68);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(243, 186, 98, 0.18);
+      box-shadow: 0 18px 44px -14px rgba(0, 0, 0, 0.65);
+    }
+
+    #mainCard {
+      box-shadow: 0 30px 80px -24px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 248, 240, 0.03);
+      animation: portal-enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    button, a, input, select { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid #FDE4B0;
+      outline-offset: 3px;
+    }
+
+    @keyframes portal-enter {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #listaProdutos > .glass-panel {
+      animation: product-reveal 0.45s both cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #listaProdutos > .glass-panel:nth-child(2) { animation-delay: 0.04s; }
+    #listaProdutos > .glass-panel:nth-child(3) { animation-delay: 0.08s; }
+    #listaProdutos > .glass-panel:nth-child(4) { animation-delay: 0.12s; }
+    #listaProdutos > .glass-panel:nth-child(5) { animation-delay: 0.16s; }
+    #listaProdutos > .glass-panel:nth-child(6) { animation-delay: 0.2s; }
+    #listaProdutos > .glass-panel:nth-child(7) { animation-delay: 0.24s; }
+    #listaProdutos > .glass-panel:nth-child(8) { animation-delay: 0.28s; }
+
+    @keyframes product-reveal {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .glass-input {
+      background: rgba(18, 6, 26, 0.7);
+      border: 1px solid rgba(243, 186, 98, 0.2);
+      color: #FFF8F0;
+      transition: all 0.2s ease;
+    }
+    .glass-input:focus {
+      border-color: #F3BA62;
+      box-shadow: 0 0 0 3px rgba(243, 186, 98, 0.18);
+      outline: none;
+    }
+
+    input::placeholder { color: rgba(184, 164, 189, 0.58); }
+    select, input { color-scheme: dark; }
+
+    @media (max-width: 639px) {
+      body { justify-content: flex-start; padding: 0.75rem; }
+      body > aside { margin-bottom: 0.65rem; padding-inline: 0.15rem; }
+      body > aside a { min-height: 2.25rem; display: inline-flex; align-items: center; }
+      #mainCard {
+        min-height: calc(100svh - 4.5rem);
+        border-radius: 1.75rem;
+      }
+      #mainCard > header { padding: 1rem 1rem 0.85rem; }
+      #mainCard > header h1 { font-size: 1.05rem; }
+      #mainCard > header .w-11 { width: 2.65rem; height: 2.65rem; border-radius: 0.9rem; }
+      #stepper { padding-inline: 1rem; }
+      #stepper > div { gap: 0.3rem; }
+      #stepper > div > span:last-child { font-size: 0.62rem; }
+      #catalogo > div:first-child { padding-inline: 0.9rem; }
+      #listaProdutos { padding: 1rem 0.9rem 8rem; }
+      #listaProdutos > .glass-panel { border-radius: 1.35rem; padding: 0.85rem; }
+      #listaProdutos > .glass-panel .w-14 { width: 3rem; height: 3rem; font-size: 1.4rem; border-radius: 0.9rem; }
+      #listaProdutos > .glass-panel h3 { font-size: 0.78rem; }
+      #listaProdutos > .glass-panel p { font-size: 0.68rem; }
+      #barraCarrinho { padding: 0.85rem; }
+      #identificacao, #pagamento, #comprovante { padding: 1rem; }
+      #identificacao input, #identificacao select { min-height: 3rem; }
+      footer { margin-top: 0.7rem; font-size: 0.65rem; }
+    }
+
+    /* Animações e Transições Fluídas */
+    .screen {
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .screen.hidden-screen {
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      visibility: hidden;
+      transform: translateY(16px) scale(0.98);
+    }
+    .screen.active-screen {
+      opacity: 1;
+      pointer-events: auto;
+      position: relative;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Feedback Tátil Premium */
+    .btn-touch {
+      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+    .btn-touch:hover {
+      transform: translateY(-1px);
+    }
+    .btn-touch:active {
+      transform: scale(0.96);
+    }
+
+    /* Brilho Shimmer Dourado */
+    .btn-gold-gradient {
+      background: linear-gradient(135deg, #F3BA62 0%, #D97706 100%);
+      color: #1a0826;
+      box-shadow: 0 4px 20px -2px rgba(243, 186, 98, 0.4);
+    }
+    .btn-gold-gradient:hover {
+      background: linear-gradient(135deg, #FDE4B0 0%, #E5A642 100%);
+      box-shadow: 0 6px 24px 0 rgba(243, 186, 98, 0.55);
+    }
+
+    /* Ticket Perfurado com Alta Definição */
+    .ticket-container {
+      position: relative;
+      background: linear-gradient(160deg, rgba(46, 18, 60, 0.92) 0%, rgba(26, 9, 36, 0.95) 100%);
+      border: 1px dashed rgba(243, 186, 98, 0.4);
+    }
+    .ticket-container::before, .ticket-container::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 26px;
+      height: 26px;
+      background: #0e0514;
+      border: 1px solid rgba(243, 186, 98, 0.35);
+      border-radius: 50%;
+      z-index: 30;
+      transform: translateY(-50%);
+    }
+    .ticket-container::before { left: -14px; }
+    .ticket-container::after { right: -14px; }
+
+    #confettiCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* Pulsar sutil no crachá de Aberto */
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.3); opacity: 0; }
+      100% { transform: scale(0.95); opacity: 0; }
+    }
+    .live-dot::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: #10B981;
+      animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center justify-center p-3 sm:p-6 selection:bg-brand-gold selection:text-brand-dark">
+
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- ATALHO RÁPIDO PARA O PAINEL ADMIN (DEMO BAR) -->
+  <aside class="w-full max-w-md mb-3 flex items-center justify-between px-3 text-xs">
+    <span class="text-brand-muted/80 flex items-center gap-1.5 font-medium">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 relative live-dot"></span>
+      Alta Confeitaria &bull; Ateliê Gourmet
+    </span>
+    <a href="admin.html" class="px-3 py-1 rounded-full bg-brand-surface border border-brand-border text-brand-gold hover:text-white hover:border-brand-gold transition-colors font-semibold flex items-center gap-1 btn-touch">
+      <span>👩‍🍳</span> Painel da Confeiteira &rarr;
+    </a>
+  </aside>
+
+  <!-- CONTAINER PRINCIPAL DO PORTAL (ESTILO DISPOSITIVO LUXURY) -->
+  <main id="mainCard" class="w-full max-w-md glass-panel rounded-[2.5rem] overflow-hidden relative min-h-[720px] flex flex-col border border-brand-border">
+
+    <!-- CABEÇALHO ELEGANTE COM IDENTIDADE VISUAL -->
+    <header class="px-6 pt-6 pb-4 flex items-center justify-between border-b border-brand-border/60 bg-brand-deep/50 backdrop-blur-md z-40">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-brand-gold via-amber-600 to-brand-berry text-white flex items-center justify-center text-2xl shadow-glow-gold">
+          🧁
+        </div>
+        <div>
+          <h1 class="font-serif font-bold text-white text-xl tracking-tight leading-none flex items-center gap-1.5">
+            Doce Encomenda
+          </h1>
+          <div class="flex items-center gap-2 mt-1">
+            <span class="text-[10px] font-bold text-brand-gold uppercase tracking-widest">Pâtisserie Artesanal</span>
+            <span class="text-brand-border text-[9px]">&bull;</span>
+            <span class="text-[10px] font-semibold text-emerald-400 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Aberto
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ícone do Carrinho Flutuante / Header -->
+      <button onclick="focarCarrinho()" class="relative p-2.5 rounded-2xl bg-brand-surface hover:bg-brand-card border border-brand-border text-brand-gold hover:text-white transition-all btn-touch" title="Ver Carrinho">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+        </svg>
+        <span id="badgeCarrinhoTopo" class="absolute -top-1 -right-1 bg-gradient-to-r from-brand-berry to-brand-rose text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md scale-0 transition-transform">
+          0
+        </span>
+      </button>
+    </header>
+
+    <!-- ETAPAS DE PROGRESSO DO CHECKOUT -->
+    <nav id="stepper" class="px-6 py-2.5 bg-brand-dark/60 border-b border-brand-border/30 flex items-center justify-between text-[11px] font-semibold text-brand-muted z-30">
+      <div id="step-1" class="flex items-center gap-1.5 text-brand-gold transition-colors">
+        <span class="w-5 h-5 rounded-full bg-brand-gold text-brand-dark flex items-center justify-center text-[10px] font-black">1</span>
+        <span>Cardápio</span>
+      </div>
+      <div class="h-[1px] w-6 bg-brand-border/40"></div>
+      <div id="step-2" class="flex items-center gap-1.5 text-brand-muted/70 transition-colors">
+        <span class="w-5 h-5 rounded-full bg-brand-surface border border-brand-border text-brand-muted flex items-center justify-center text-[10px] font-bold">2</span>
+        <span>Retirada</span>
+      </div>
+      <div class="h-[1px] w-6 bg-brand-border/40"></div>
+      <div id="step-3" class="flex items-center gap-1.5 text-brand-muted/70 transition-colors">
+        <span class="w-5 h-5 rounded-full bg-brand-surface border border-brand-border text-brand-muted flex items-center justify-center text-[10px] font-bold">3</span>
+        <span>Sinal 50%</span>
+      </div>
+    </nav>
+
+    <!-- ÁREA DE TELAS DINÂMICAS -->
+    <div class="flex-1 flex flex-col relative z-20 overflow-hidden">
+
+      <!-- ============================================ -->
+      <!-- 0. SPLASH SCREEN ELEGANTE -->
+      <!-- ============================================ -->
+      <div id="splash" class="screen active-screen absolute inset-0 z-50 flex flex-col items-center justify-center bg-brand-dark/95 backdrop-blur-2xl text-white p-6 text-center">
+        <div class="relative mb-5">
+          <div class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-brand-gold via-brand-berry to-pink-500 p-0.5 shadow-glow-gold animate-pulse">
+            <div class="w-full h-full bg-brand-dark rounded-[22px] flex items-center justify-center text-5xl">
+              🧁
+            </div>
+          </div>
+        </div>
+        <h2 class="text-3xl font-serif font-bold tracking-tight text-white">Doce Encomenda</h2>
+        <p class="mt-1.5 text-xs text-brand-gold font-bold tracking-widest uppercase">Alta Pâtisserie & Doces Finos</p>
+        <div class="mt-8 flex items-center gap-2 text-xs text-brand-muted">
+          <svg class="animate-spin h-4 w-4 text-brand-gold" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Preparando receitas exclusivas...</span>
+        </div>
+      </div>
+
+      <!-- ============================================ -->
+      <!-- 1. CATÁLOGO DE PRODUTOS COM FILTROS -->
+      <!-- ============================================ -->
+      <div id="catalogo" class="screen hidden-screen flex-1 flex flex-col h-full">
+        
+        <!-- BARRA DE CATEGORIAS -->
+        <div class="px-5 pt-4 pb-2 flex gap-2 overflow-x-auto no-scrollbar border-b border-brand-border/20">
+          <button onclick="filtrarCategoria('todos')" data-cat="todos" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-brand-gold text-brand-dark shadow-sm whitespace-nowrap">
+            Todos
+          </button>
+          <button onclick="filtrarCategoria('bolos')" data-cat="bolos" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-medium text-brand-muted hover:text-white bg-brand-surface border border-brand-border/40 whitespace-nowrap transition-all">
+            🎂 Bolos
+          </button>
+          <button onclick="filtrarCategoria('doces')" data-cat="doces" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-medium text-brand-muted hover:text-white bg-brand-surface border border-brand-border/40 whitespace-nowrap transition-all">
+            🍫 Brigadeiros
+          </button>
+          <button onclick="filtrarCategoria('combos')" data-cat="combos" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-medium text-brand-muted hover:text-white bg-brand-surface border border-brand-border/40 whitespace-nowrap transition-all">
+            ✨ Combos
+          </button>
+        </div>
+
+        <!-- LISTA DE PRODUTOS SCROLLÁVEL -->
+        <div class="flex-1 p-5 overflow-y-auto no-scrollbar pb-32 space-y-3.5" id="listaProdutos">
+          <!-- Gerado dinamicamente pelo app.js com cards elegantes -->
+        </div>
+
+        <!-- BARRA INFERIOR FLUTUANTE DO CARRINHO (DRAWER) -->
+        <div id="barraCarrinho" class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-brand-deep via-brand-dark/95 to-brand-dark/80 backdrop-blur-xl border-t border-brand-border/60 transform translate-y-full transition-all duration-300 shadow-2xl z-40">
+          <div class="flex items-center justify-between mb-3 px-1">
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-brand-gold/20 text-brand-gold flex items-center justify-center text-xs font-black" id="qtdItensBadge">0</span>
+              <span class="text-xs font-bold text-white tracking-wide">Itens no Pedido</span>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] text-brand-muted uppercase tracking-wider block leading-none">Total</span>
+              <span class="text-base font-black text-brand-gold" id="totalCarrinho">R$ 0,00</span>
+            </div>
+          </div>
+          
+          <button onclick="irParaIdentificacao()" class="w-full btn-gold-gradient py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 btn-touch font-sans tracking-wide">
+            <span>Avançar para Retirada</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ============================================ -->
+      <!-- 2. IDENTIFICAÇÃO E DADOS DE RETIRADA -->
+      <!-- ============================================ -->
+      <div id="identificacao" class="screen hidden-screen flex-1 p-6 flex flex-col justify-between overflow-y-auto no-scrollbar">
+        <div class="space-y-4">
+          <button onclick="voltarParaCatalogo()" class="text-brand-gold hover:text-brand-goldLight text-xs font-bold flex items-center gap-1.5 btn-touch transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Voltar ao Cardápio
+          </button>
+
+          <div>
+            <h2 class="text-xl font-serif font-bold text-white">Dados de Retirada</h2>
+            <p class="text-xs text-brand-muted mt-1 leading-relaxed">
+              Produção sob encomenda com ingredientes nobres. Informe seus dados para prepararmos seu pedido:
+            </p>
+          </div>
+
+          <div class="space-y-3.5">
+            <div>
+              <label class="block text-[11px] font-bold text-brand-gold uppercase tracking-wider mb-1.5">Seu Nome Completo</label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-brand-muted text-sm">👤</span>
+                <input type="text" id="cliNome" placeholder="Ex: Fernanda Lima" class="w-full pl-10 pr-3.5 py-3 glass-input rounded-xl text-sm font-medium placeholder:text-brand-muted/40">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-brand-gold uppercase tracking-wider mb-1.5">WhatsApp (p/ confirmação)</label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-brand-muted text-sm">💬</span>
+                <input type="tel" id="cliWhats" placeholder="(11) 98765-4321" class="w-full pl-10 pr-3.5 py-3 glass-input rounded-xl text-sm font-medium placeholder:text-brand-muted/40">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-1">
+              <div>
+                <label class="block text-[11px] font-bold text-brand-gold uppercase tracking-wider mb-1.5">Data da Retirada</label>
+                <input type="date" id="cliData" class="w-full p-3 glass-input rounded-xl text-xs font-semibold cursor-pointer">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-brand-gold uppercase tracking-wider mb-1.5">Horário Previsto</label>
+                <select id="cliHora" class="w-full p-3 glass-input rounded-xl text-xs font-semibold cursor-pointer bg-brand-deep text-white">
+                  <option value="Manhã (10h - 12h)">Manhã (10h às 12h)</option>
+                  <option value="Tarde (14h - 16h30)" selected>Tarde (14h às 16h30)</option>
+                  <option value="Fim de Tarde (17h - 19h)">Fim de Tarde (17h às 19h)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-brand-muted uppercase tracking-wider mb-1.5">Observações ou Dedicatória (Opcional)</label>
+              <input type="text" id="cliObs" placeholder="Ex: Escrever 'Parabéns Sofia' na plaquinha" class="w-full px-3.5 py-2.5 glass-input rounded-xl text-xs placeholder:text-brand-muted/40">
+            </div>
+          </div>
+
+          <!-- Resumo Rápido da Compra -->
+          <div class="p-3.5 rounded-2xl bg-brand-surface/70 border border-brand-border/40 text-xs flex justify-between items-center">
+            <span class="text-brand-muted">Total a encomendar:</span>
+            <span class="font-black text-brand-gold text-sm" id="resumoSubtotal">R$ 0,00</span>
+          </div>
+        </div>
+
+        <button onclick="validarEAvancarPagamento()" class="w-full mt-6 btn-gold-gradient py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 btn-touch">
+          <span>Ir para Garantia (Sinal 50%)</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- ============================================ -->
+      <!-- 3. PAGAMENTO DO SINAL (50%) -->
+      <!-- ============================================ -->
+      <div id="pagamento" class="screen hidden-screen flex-1 p-6 flex flex-col justify-between overflow-y-auto no-scrollbar">
+        <div class="space-y-4">
+          <button onclick="goTo('identificacao')" class="text-brand-gold hover:text-brand-goldLight text-xs font-bold flex items-center gap-1.5 btn-touch transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Alterar Dados
+          </button>
+
+          <div>
+            <span class="text-[10px] font-extrabold uppercase tracking-widest text-brand-rose px-2.5 py-0.5 rounded-full bg-brand-rose/10 border border-brand-rose/20">Reserva de Insumos</span>
+            <h2 class="text-xl font-serif font-bold text-white mt-1">Sinal de Reserva (50%)</h2>
+            <p class="text-xs text-brand-muted mt-1 leading-relaxed">
+              Como nossos doces são 100% artesanais e frescos, pedimos um sinal para garantir sua data na esteira. O restante é pago na retirada!
+            </p>
+          </div>
+
+          <!-- CARD PIX LUXO -->
+          <div class="glass-panel p-5 rounded-3xl border border-brand-gold/30 text-center relative overflow-hidden shadow-glow-gold">
+            <div class="absolute -top-8 -right-8 w-28 h-28 bg-brand-gold/10 rounded-full blur-2xl"></div>
+
+            <span class="text-[10px] font-bold text-brand-muted uppercase tracking-widest block mb-1">Valor do Sinal via PIX</span>
+            <p class="text-3xl font-serif font-black text-brand-gold tracking-tight" id="valorSinal">R$ 0,00</p>
+            
+            <div class="mt-4 p-3 bg-white rounded-2xl inline-block shadow-lg mx-auto border-2 border-brand-gold/40">
+              <img id="pixQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=PIX_DOCE_ENCOMENDA&color=1a0826&bgcolor=ffffff" alt="QR Code PIX" class="w-32 h-32 rounded-lg">
+            </div>
+
+            <p class="text-[11px] text-brand-cream/80 mt-2 font-medium">Escaneie o QR Code ou use o botão abaixo:</p>
+
+            <button onclick="copiarPix()" id="btnCopiarPix" class="mt-3 w-full bg-brand-surface hover:bg-brand-card border border-brand-gold/40 text-brand-gold hover:text-white py-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 btn-touch transition-all">
+              <span id="copyIcon">📋</span> 
+              <span id="copyText">Copiar Código PIX (Copia e Cola)</span>
+            </button>
+          </div>
+
+          <!-- Saldo Restante -->
+          <div class="bg-brand-surface/80 p-3.5 rounded-2xl border border-brand-border/40 flex justify-between items-center text-xs">
+            <div class="flex items-center gap-2">
+              <span class="text-base">💳</span>
+              <span class="text-brand-muted">Saldo restante p/ a retirada:</span>
+            </div>
+            <span class="font-extrabold text-brand-cream" id="valorRestante">R$ 0,00</span>
+          </div>
+        </div>
+
+        <button onclick="simularPagamento()" id="btnConfirmarPix" class="w-full mt-5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black py-4 rounded-2xl text-sm transition-all btn-touch shadow-[0_0_20px_rgba(16,185,129,0.35)] flex items-center justify-center gap-2">
+          <span>Já Realizei o Pagamento</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- ============================================ -->
+      <!-- 4. TICKET VIP COMPROVANTE (SUCESSO) -->
+      <!-- ============================================ -->
+      <div id="comprovante" class="screen hidden-screen flex-1 p-6 flex flex-col items-center justify-between text-center overflow-y-auto no-scrollbar">
+        
+        <div class="w-full mt-2">
+          <div class="w-16 h-16 bg-emerald-500/20 border border-emerald-400/40 text-emerald-400 rounded-3xl flex items-center justify-center mx-auto mb-3 text-3xl shadow-[0_0_30px_rgba(16,185,129,0.3)] animate-bounce">
+            ✓
+          </div>
+          <span class="text-[10px] font-bold text-emerald-400 tracking-widest uppercase bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+            Sinal Confirmado com Sucesso!
+          </span>
+          <h2 class="text-2xl font-serif font-black text-white mt-2">Pedido na Produção!</h2>
+          <p class="text-brand-muted text-xs mt-1">Guarde este ticket de retirada para apresentar no ateliê.</p>
+        </div>
+        
+        <!-- TICKET VIP COM RECORTES DE ALTA CONFEITARIA -->
+        <div class="w-full ticket-container p-6 rounded-3xl text-left my-4 shadow-ticket">
+          
+          <div class="flex items-center justify-between border-b border-brand-gold/30 pb-3">
+            <div>
+              <span class="text-[9px] uppercase font-black text-brand-gold tracking-widest">TICKET VIP DE RETIRADA</span>
+              <p class="font-serif font-bold text-white text-base mt-0.5" id="ticketNome">Ana Silva</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs font-mono font-black px-2.5 py-1 rounded-lg bg-brand-gold/20 text-brand-gold border border-brand-gold/40" id="ticketCodigo">#DOCE-0000</span>
+            </div>
+          </div>
+
+          <!-- Itens do Ticket -->
+          <div class="py-3 border-b border-white/5 space-y-1 text-xs">
+            <span class="text-[10px] uppercase font-bold text-brand-muted tracking-wider block">Itens Solicitados:</span>
+            <div id="ticketItensLista" class="space-y-1 text-brand-cream/90 font-medium">
+              <!-- Preenchido via app.js -->
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-xs pt-3 mb-3">
+            <div>
+              <span class="text-brand-muted text-[10px] uppercase font-semibold block mb-0.5">Data & Horário</span>
+              <span id="ticketDataHora" class="font-bold text-white text-xs">00/00 às 00:00</span>
+            </div>
+            <div class="text-right">
+              <span class="text-brand-muted text-[10px] uppercase font-semibold block mb-0.5">Sinal Pago (50%)</span>
+              <span id="ticketSinal" class="font-black text-emerald-400 text-xs">R$ 0,00</span>
+            </div>
+          </div>
+          
+          <div class="bg-brand-dark/90 p-3 rounded-2xl border border-brand-gold/30 flex items-center justify-between">
+            <span class="text-[11px] text-brand-muted font-medium">Falta Pagar na Retirada:</span>
+            <span class="text-sm font-black text-brand-gold" id="ticketRestante">R$ 0,00</span>
+          </div>
+        </div>
+        
+        <!-- AÇÕES FINAIS -->
+        <div class="w-full space-y-2.5">
+          <button onclick="enviarParaWhatsApp()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-3.5 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 btn-touch shadow-lg shadow-emerald-500/20">
+            <span class="text-base">💬</span> Enviar Pedido no WhatsApp da Confeiteira
+          </button>
+          
+          <button onclick="resetarApp()" class="w-full text-brand-muted hover:text-white text-xs font-semibold py-2.5 transition-colors btn-touch">
+            Fazer Nova Encomenda
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- RODAPÉ DE REQUINTE -->
+  <footer class="mt-4 text-center text-xs text-brand-muted/70 flex items-center justify-center gap-2">
+    <span>Doce Encomenda &bull; Feito à mão com amor e chocolate nobre</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
