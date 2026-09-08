@@ -77,6 +77,30 @@ A opção **Lista de Compras (JIT)** consolida os ingredientes necessários para
 
 As quantidades são calculadas a partir do mapeamento de ingredientes em `admin.js`.
 
+### Atualizar produtos e receitas
+
+No cabeçalho do painel, abra **Cardápio & Receitas**.
+
+1. Clique em **+ Novo** para cadastrar um produto ou selecione um produto existente para editar.
+2. Preencha nome, emoji, categoria, preço, selo, rendimento e descrição.
+3. Cadastre a receita com uma linha por ingrediente no formato:
+
+   ```text
+   Ingrediente | quantidade | unidade
+   ```
+
+   Exemplo:
+
+   ```text
+   Leite Condensado | 3 | latas
+   Ovos | 4 | unidades
+   Manteiga | 200 | g
+   ```
+
+4. Clique em **Salvar no cardápio**.
+
+O produto passa a aparecer no portal do cliente e no formulário de pedido de balcão. A receita passa a ser considerada pela **Lista de Compras (JIT)**. Produtos também podem ser excluídos pelo mesmo editor.
+
 ## Estrutura do projeto
 
 ```text
@@ -111,6 +135,13 @@ Os pedidos são salvos em:
 
 ```text
 localStorage['doce_encomenda_pedidos']
+```
+
+O catálogo e as receitas usam estas chaves adicionais:
+
+```text
+localStorage['doce_encomenda_catalogo']
+localStorage['doce_encomenda_receitas']
 ```
 
 Isso significa:

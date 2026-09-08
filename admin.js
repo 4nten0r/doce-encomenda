@@ -31,7 +31,7 @@ let pedidos = JSON.parse(localStorage.getItem("doce_encomenda_pedidos")) || [
 ];
 
 // Mapeamento de Ingredientes por Produto (Para o Gerador JIT)
-const receitaIngredientes = {
+const RECEITAS_LEGADO = {
   "Bolo Clássico 1.5kg": [
     { name: "Leite Condensado", quantity: 3, unit: "latas" },
     { name: "Farinha de Trigo", quantity: 0.5, unit: "kg" },
@@ -58,6 +58,9 @@ const receitaIngredientes = {
   ]
 };
 
+let catalogo = carregarCatalogo();
+let receitaIngredientes = carregarReceitas();
+
 // Inicialização ao carregar a página
 document.addEventListener("DOMContentLoaded", () => {
   const hoje = new Date().toISOString().split('T')[0];
@@ -72,6 +75,130 @@ document.addEventListener("DOMContentLoaded", () => {
 // Salvar no LocalStorage
 function salvarNoStorage() {
   localStorage.setItem("doce_encomenda_pedidos", JSON.stringify(pedidos));
+}
+
+function escaparHtml(valor) {
+  return String(valor || '').replace(/[&<>'"]/g, caractere => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+  }[caractere]));
+}
+
+function abrirModalCatalogo() {
+  renderizarListaCatalogoAdmin();
+  atualizarOpcoesProdutoBalcao();
+  document.getElementById("modalCatalogo").classList.remove("hidden");
+  if (!document.getElementById("catalogoId").value) novoProdutoCatalogo();
+}
+
+function fecharModalCatalogo() {
+  document.getElementById("modalCatalogo").classList.add("hidden");
+}
+
+function renderizarListaCatalogoAdmin() {
+  const container = document.getElementById("listaCatalogoAdmin");
+  if (!container) return;
+
+  container.innerHTML = catalogo.map(produto => `
+    <button type="button" onclick="editarProdutoCatalogo('${produto.id}')" class="w-full text-left p-2.5 rounded-xl bg-black/15 hover:bg-white/5 border border-white/10 flex items-center gap-2.5 transition-colors">
+      <span class="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center text-lg shrink-0">${escaparHtml(produto.emoji || '🍰')}</span>
+      <span class="min-w-0 flex-1">
+        <strong class="block text-xs text-white truncate">${escaparHtml(produto.nome)}</strong>
+        <span class="block text-[10px] text-slate-400 mt-0.5">${escaparHtml(produto.categoria)} · R$ ${Number(produto.preco).toFixed(2).replace('.', ',')}</span>
+      </span>
+      <span class="text-slate-500 text-xs">›</span>
+    </button>
+  `).join('');
+}
+
+function novoProdutoCatalogo() {
+  document.getElementById("formCatalogo").reset();
+  document.getElementById("catalogoId").value = '';
+  document.getElementById("catalogoEmoji").value = '🍰';
+  document.getElementById("tituloFormCatalogo").textContent = 'Novo produto';
+  document.getElementById("btnExcluirCatalogo").classList.add('hidden');
+}
+
+function limparFormCatalogo() {
+  novoProdutoCatalogo();
+}
+
+function editarProdutoCatalogo(id) {
+  const produto = catalogo.find(item => item.id === id);
+  if (!produto) return;
+
+  document.getElementById("catalogoId").value = produto.id;
+  document.getElementById("catalogoNome").value = produto.nome;
+  document.getElementById("catalogoEmoji").value = produto.emoji || '🍰';
+  document.getElementById("catalogoCategoria").value = produto.categoria;
+  document.getElementById("catalogoPreco").value = produto.preco;
+  document.getElementById("catalogoBadge").value = produto.badge || '';
+  document.getElementById("catalogoRendimento").value = produto.rendimento || '';
+  document.getElementById("catalogoDescricao").value = produto.descricao || '';
+  document.getElementById("catalogoReceita").value = (receitaIngredientes[id] || [])
+    .map(ingrediente => `${ingrediente.name} | ${ingrediente.quantity} | ${ingrediente.unit}`).join('\n');
+  document.getElementById("tituloFormCatalogo").textContent = 'Editar produto';
+  document.getElementById("btnExcluirCatalogo").classList.remove('hidden');
+}
+
+function lerReceitaDoFormulario() {
+  return document.getElementById("catalogoReceita").value.split('\n')
+    .map(linha => linha.split('|').map(parte => parte.trim()))
+    .filter(partes => partes.length >= 3 && partes[0] && Number(partes[1]) > 0 && partes[2])
+    .map(partes => ({ name: partes[0], quantity: Number(partes[1]), unit: partes[2] }));
+}
+
+function salvarProdutoCatalogo(event) {
+  event.preventDefault();
+
+  const idAtual = document.getElementById("catalogoId").value;
+  const produto = {
+    id: idAtual || `p-${Date.now()}`,
+    nome: document.getElementById("catalogoNome").value.trim(),
+    categoria: document.getElementById("catalogoCategoria").value,
+    preco: Number(document.getElementById("catalogoPreco").value),
+    descricao: document.getElementById("catalogoDescricao").value.trim(),
+    emoji: document.getElementById("catalogoEmoji").value.trim() || '🍰',
+    badge: document.getElementById("catalogoBadge").value.trim() || 'Artesanal',
+    rendimento: document.getElementById("catalogoRendimento").value.trim() || 'Feito sob encomenda'
+  };
+
+  if (idAtual) {
+    catalogo = catalogo.map(item => item.id === idAtual ? produto : item);
+  } else {
+    catalogo.push(produto);
+  }
+
+  receitaIngredientes[produto.id] = lerReceitaDoFormulario();
+  salvarCatalogo(catalogo);
+  salvarReceitas(receitaIngredientes);
+  renderizarListaCatalogoAdmin();
+  atualizarOpcoesProdutoBalcao();
+  novoProdutoCatalogo();
+  alert('Produto e receita salvos no cardápio.');
+}
+
+function excluirProdutoCatalogo() {
+  const idAtual = document.getElementById("catalogoId").value;
+  const produto = catalogo.find(item => item.id === idAtual);
+  if (!produto || !confirm(`Excluir "${produto.nome}" do cardápio?`)) return;
+
+  catalogo = catalogo.filter(item => item.id !== idAtual);
+  delete receitaIngredientes[idAtual];
+  salvarCatalogo(catalogo);
+  salvarReceitas(receitaIngredientes);
+  renderizarListaCatalogoAdmin();
+  atualizarOpcoesProdutoBalcao();
+  novoProdutoCatalogo();
+}
+
+function atualizarOpcoesProdutoBalcao() {
+  const select = document.getElementById("bProduto");
+  if (!select) return;
+  const valorAtual = select.value;
+  select.innerHTML = catalogo.map(produto => `
+    <option value="${escaparHtml(produto.id)}">${escaparHtml(produto.nome)} (R$ ${Number(produto.preco).toFixed(2).replace('.', ',')})</option>
+  `).join('');
+  if (catalogo.some(produto => produto.id === valorAtual)) select.value = valorAtual;
 }
 
 // ==========================================
@@ -198,6 +325,7 @@ function mudarStatus(idPedido, direcao) {
 function abrirModalBalcao() {
   const hoje = new Date().toISOString().split('T')[0];
   document.getElementById("bData").value = hoje;
+  atualizarOpcoesProdutoBalcao();
   document.getElementById("modalBalcao").classList.remove("hidden");
 }
 
@@ -210,26 +338,20 @@ function salvarPedidoBalcao(event) {
 
   const nome = document.getElementById("bNome").value.trim();
   const fone = document.getElementById("bFone").value.trim();
-  const produtoNome = document.getElementById("bProduto").value;
+  const produtoId = document.getElementById("bProduto").value;
+  const produto = catalogo.find(item => item.id === produtoId) || catalogo[0];
+  const produtoNome = produto ? produto.nome : 'Produto artesanal';
   const data = document.getElementById("bData").value;
   const janela = document.getElementById("bJanela").value;
 
-  // Preço base simulado por produto
-  const precos = {
-    "Bolo Clássico 1.5kg": 120.00,
-    "Bolo Red Velvet": 140.00,
-    "Cento de Brigadeiros Tradicionais": 90.00,
-    "Combo Festa": 170.00
-  };
-
-  const precoTotal = precos[produtoNome] || 120.00;
+  const precoTotal = produto ? Number(produto.preco) : 0;
   const sinal = precoTotal / 2;
 
   const novoPedido = {
     id: `#DOCE-${Math.floor(100 + Math.random() * 900)}`,
     clientName: nome,
     clientPhone: fone,
-    items: [{ name: produtoNome, quantity: 1, price: precoTotal }],
+    items: [{ productId, name: produtoNome, quantity: 1, price: precoTotal }],
     totalAmount: precoTotal,
     depositAmount: sinal,
     remainingAmount: sinal,
@@ -281,7 +403,8 @@ relevantPedidos = pedidos.filter(p => {
 
   relevantPedidos.forEach(pedido => {
     pedido.items.forEach(item => {
-      const receita = receitaIngredientes[item.name];
+      const produto = catalogo.find(itemCatalogo => itemCatalogo.id === item.productId || itemCatalogo.nome === item.name);
+      const receita = receitaIngredientes[item.productId] || (produto && receitaIngredientes[produto.id]) || receitaIngredientes[item.name];
       if (receita) {
         receita.forEach(ing => {
           const chave = `${ing.name} (${ing.unit})`;

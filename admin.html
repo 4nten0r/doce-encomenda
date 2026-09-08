@@ -131,6 +131,9 @@
     </div>
 
     <div class="flex items-center gap-2">
+      <button onclick="abrirModalCatalogo()" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-200 text-xs font-bold border border-emerald-400/25 card-touch flex items-center gap-1">
+        <span>✦</span> Cardápio & Receitas
+      </button>
       <button onclick="abrirModalCompras()" class="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-bold border border-amber-500/30 card-touch flex items-center gap-1">
         <span>🛒</span> Lista de Compras (JIT)
       </button>
@@ -218,6 +221,88 @@
     </div>
   </div>
 
+  <!-- MODAL: CARDAPIO E RECEITAS -->
+  <div id="modalCatalogo" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div class="glass-panel p-5 sm:p-6 rounded-3xl max-w-3xl w-full border border-white/10 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto no-scrollbar">
+      <div class="flex items-start justify-between gap-3 pb-3 border-b border-white/10">
+        <div>
+          <span class="text-[10px] uppercase tracking-widest font-bold text-emerald-300">Conteúdo do portal</span>
+          <h3 class="text-lg font-bold text-white mt-1">Cardápio & Receitas</h3>
+          <p class="text-xs text-slate-400 mt-1">Altere os produtos publicados e os ingredientes usados pela lista de compras.</p>
+        </div>
+        <button onclick="fecharModalCatalogo()" class="text-slate-400 hover:text-white p-1 text-lg" title="Fechar">✕</button>
+      </div>
+
+      <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-4">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs uppercase tracking-wider font-bold text-[#E29578]">Produtos cadastrados</h4>
+            <button onclick="novoProdutoCatalogo()" class="px-2.5 py-1.5 rounded-lg bg-[#8C4A32]/30 text-[#E29578] border border-[#E29578]/30 text-[10px] font-bold">+ Novo</button>
+          </div>
+          <div id="listaCatalogoAdmin" class="space-y-2"></div>
+        </div>
+
+        <form id="formCatalogo" onsubmit="salvarProdutoCatalogo(event)" class="space-y-3 p-3.5 rounded-2xl bg-black/15 border border-white/10">
+          <input type="hidden" id="catalogoId">
+          <div class="flex items-center justify-between">
+            <h4 id="tituloFormCatalogo" class="text-xs uppercase tracking-wider font-bold text-emerald-300">Novo produto</h4>
+            <button type="button" onclick="limparFormCatalogo()" class="text-[10px] text-slate-400 hover:text-white">Limpar</button>
+          </div>
+
+          <div class="grid grid-cols-[1fr_4.5rem] gap-2">
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-300 mb-1">Nome do produto</label>
+              <input id="catalogoNome" required class="w-full glass-input p-2.5 rounded-xl text-xs outline-none" placeholder="Ex: Bolo de Limão">
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-300 mb-1">Emoji</label>
+              <input id="catalogoEmoji" class="w-full glass-input p-2.5 rounded-xl text-center text-lg outline-none" placeholder="🍰" maxlength="4">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-300 mb-1">Categoria</label>
+              <select id="catalogoCategoria" class="w-full glass-input p-2.5 rounded-xl text-xs outline-none bg-slate-900 text-white">
+                <option value="bolos">Bolos</option>
+                <option value="doces">Brigadeiros</option>
+                <option value="combos">Combos</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-300 mb-1">Preço (R$)</label>
+              <input id="catalogoPreco" required type="number" min="0" step="0.01" class="w-full glass-input p-2.5 rounded-xl text-xs outline-none" placeholder="120,00">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-semibold text-slate-300 mb-1">Selo e rendimento</label>
+            <div class="grid grid-cols-2 gap-2">
+              <input id="catalogoBadge" class="glass-input p-2.5 rounded-xl text-xs outline-none" placeholder="Mais pedido">
+              <input id="catalogoRendimento" class="glass-input p-2.5 rounded-xl text-xs outline-none" placeholder="Serve 10 pessoas">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-semibold text-slate-300 mb-1">Descrição</label>
+            <textarea id="catalogoDescricao" required rows="2" class="w-full glass-input p-2.5 rounded-xl text-xs outline-none resize-none" placeholder="Descreva o produto para o cliente"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-semibold text-slate-300 mb-1">Receita / ingredientes</label>
+            <p class="text-[10px] text-slate-500 mb-1">Uma linha por ingrediente: <strong>nome | quantidade | unidade</strong></p>
+            <textarea id="catalogoReceita" rows="5" class="w-full glass-input p-2.5 rounded-xl text-xs outline-none resize-y" placeholder="Leite Condensado | 3 | latas&#10;Ovos | 4 | unidades"></textarea>
+          </div>
+
+          <div class="flex gap-2 pt-1">
+            <button type="submit" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#8C4A32] to-[#E29578] text-slate-950 font-extrabold text-xs card-touch">Salvar no cardápio</button>
+            <button type="button" id="btnExcluirCatalogo" onclick="excluirProdutoCatalogo()" class="hidden px-3 py-2.5 rounded-xl bg-rose-500/15 text-rose-200 border border-rose-400/25 text-xs font-bold">Excluir</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: NOVO PEDIDO BALCÃO -->
   <div id="modalBalcao" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
     <div class="glass-panel p-6 rounded-3xl max-w-md w-full border border-white/10 shadow-2xl space-y-4">
@@ -267,6 +352,7 @@
     </div>
   </div>
 
+  <script src="catalogo.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>

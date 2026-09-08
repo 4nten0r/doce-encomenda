@@ -3,7 +3,7 @@
 // ===================================================
 
 // CATÁLOGO DE PRODUTOS COMPLETO & CATEGORIZADO
-const PRODUTOS = [
+const CATALOGO_LEGADO = [
   {
     id: "p1",
     nome: "Bolo Clássico Ninho c/ Morangos (1.5kg)",
@@ -85,6 +85,8 @@ const PRODUTOS = [
     rendimento: "Ideal p/ 8 a 10 convidados"
   }
 ];
+
+let PRODUTOS = carregarCatalogo();
 
 // ESTADO DO APLICATIVO
 let carrinho = {}; // Mapeamento { [produtoId]: quantidade }
@@ -499,6 +501,7 @@ function gerarTicketFinal() {
     const p = PRODUTOS.find(prod => prod.id === id);
     if (!p) return '';
     itensFormatadosParaAdmin.push({
+      productId: id,
       name: p.nome,
       quantity: qtd,
       price: p.preco
@@ -656,4 +659,11 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     goTo('catalogo');
   }, 1200);
+});
+
+window.addEventListener("storage", (evento) => {
+  if (evento.key === "doce_encomenda_catalogo") {
+    PRODUTOS = carregarCatalogo();
+    renderizarCatalogo();
+  }
 });
