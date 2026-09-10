@@ -100,6 +100,39 @@ let dadosCliente = {
 };
 let codigoPedidoGerado = '';
 
+const IMAGENS_PRODUTOS = {
+  p1: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=85',
+  p2: 'https://images.unsplash.com/photo-1586788224331-947f68671cf1?auto=format&fit=crop&w=900&q=85',
+  p3: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=900&q=85',
+  p4: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=900&q=85',
+  p5: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=85',
+  p6: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=900&q=85',
+  p7: 'https://images.unsplash.com/photo-1519869325930-281384150729?auto=format&fit=crop&w=900&q=85',
+  p8: 'https://images.unsplash.com/photo-1535141192574-5d4897c12636?auto=format&fit=crop&w=900&q=85'
+};
+
+function imagemDoProduto(produto) {
+  const imagemLegadaQuebrada = produto.imagem && produto.imagem.includes('1575377427642');
+  return (!imagemLegadaQuebrada && produto.imagem) || IMAGENS_PRODUTOS[produto.id] || IMAGENS_PRODUTOS.p1;
+}
+
+function aplicarTema(tema) {
+  const temaAtual = tema === 'light' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = temaAtual;
+  localStorage.setItem('doce_encomenda_tema', temaAtual);
+
+  const icone = document.getElementById('themeIcon');
+  const botao = document.getElementById('themeToggle');
+  if (icone) icone.textContent = temaAtual === 'light' ? '☀' : '☾';
+  if (botao) botao.setAttribute('aria-label', temaAtual === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro');
+}
+
+function alternarTema() {
+  playSweetPop(540, 0.06);
+  const temaAtual = document.documentElement.dataset.theme || 'dark';
+  aplicarTema(temaAtual === 'light' ? 'dark' : 'light');
+}
+
 // ===================================================
 // SISTEMA DE ÁUDIO SUAVE (Sintetizador Web Audio)
 // ===================================================
@@ -212,8 +245,8 @@ function renderizarCatalogo() {
 
         <div class="flex items-start justify-between gap-3 relative z-10">
           <div class="flex items-start gap-3.5 flex-1">
-            <div class="w-14 h-14 rounded-2xl bg-brand-surface/90 border border-brand-border/40 flex items-center justify-center text-3xl shadow-inner shrink-0 group-hover:scale-105 transition-transform">
-              ${prod.emoji}
+            <div class="product-image w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-brand-surface/90 border border-brand-border/40 shadow-inner shrink-0 group-hover:scale-105 transition-transform">
+              <img src="${imagemDoProduto(prod)}" alt="${prod.nome}" loading="lazy" class="w-full h-full object-cover rounded-2xl">
             </div>
 
             <div class="flex-1 pr-1">
@@ -523,7 +556,7 @@ function gerarTicketFinal() {
     totalAmount: total,
     depositAmount: sinal,
     remainingAmount: restante,
-    status: "Em Produção", // Já vai para 'Em Produção' pois o sinal acabou de ser aprovado!
+    status: "Aguardando Sinal",
     pickupDate: dadosCliente.data,
     pickupWindow: dadosCliente.hora,
     obs: dadosCliente.obs,
@@ -644,6 +677,8 @@ function dispararChuvaDeConfetes() {
 // INICIALIZAÇÃO DO SISTEMA
 // ===================================================
 document.addEventListener("DOMContentLoaded", () => {
+  aplicarTema(localStorage.getItem('doce_encomenda_tema') || 'dark');
+
   // Preenche data mínima como hoje
   const hoje = new Date().toISOString().split('T')[0];
   const inputData = document.getElementById('cliData');

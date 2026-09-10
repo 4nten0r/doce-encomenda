@@ -7,6 +7,11 @@ Portal de encomendas para uma confeitaria artesanal, com duas interfaces:
 
 O projeto foi pensado para uso em celular, com uma identidade visual ameixa, coral, dourado e mint, combinando a delicadeza da confeitaria com uma interface moderna.
 
+## Tema claro e escuro
+
+- Tanto o portal do cliente quanto o painel da confeiteira possuem um botão de alternância entre **modo claro** e **modo escuro** no cabeçalho.
+- A preferência fica salva no navegador (`localStorage['doce_encomenda_tema']`) e é compartilhada entre as duas páginas, sendo aplicada antes da primeira pintura para evitar troca visual abrupta ao carregar.
+
 ## Links publicados
 
 - Portal do cliente: https://4nten0r.github.io/doce-encomenda/

@@ -5,6 +5,7 @@ const CATALOGO_PADRAO = [
     categoria: "bolos",
     preco: 120.00,
     descricao: "Massa amanteigada artesanal, recheio generoso de leite ninho e morangos frescos selecionados.",
+    imagem: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=85",
     emoji: "🎂",
     badge: "Mais Pedido",
     rendimento: "Serve até 15 pessoas"
@@ -15,6 +16,7 @@ const CATALOGO_PADRAO = [
     categoria: "bolos",
     preco: 140.00,
     descricao: "Veludo vermelho com autêntico recheio e cobertura de cream cheese frosting com toque de baunilha.",
+    imagem: "https://images.unsplash.com/photo-1586788224331-947f68671cf1?auto=format&fit=crop&w=900&q=85",
     emoji: "🍰",
     badge: "Assinatura",
     rendimento: "Serve até 15 pessoas"
@@ -25,6 +27,7 @@ const CATALOGO_PADRAO = [
     categoria: "bolos",
     preco: 160.00,
     descricao: "Massa fofa de pistache puro, ganache montada e geleia artesanal de frutas vermelhas.",
+    imagem: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=900&q=85",
     emoji: "🧁",
     badge: "Gourmet",
     rendimento: "Serve até 15 pessoas"
@@ -35,6 +38,7 @@ const CATALOGO_PADRAO = [
     categoria: "doces",
     preco: 75.00,
     descricao: "Blend nobre de chocolate Callebaut 54% cacau enrolado em blossoms belgas.",
+    imagem: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=900&q=85",
     emoji: "🍫",
     badge: "100% Callebaut",
     rendimento: "50 unidades artesanais"
@@ -45,6 +49,7 @@ const CATALOGO_PADRAO = [
     categoria: "doces",
     preco: 90.00,
     descricao: "Cento variado com brigadeiro tradicional, beijinho de coco queimado e dois amores.",
+    imagem: "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=85",
     emoji: "🍬",
     badge: "Favorito Festa",
     rendimento: "100 unidades"
@@ -55,6 +60,7 @@ const CATALOGO_PADRAO = [
     categoria: "doces",
     preco: 68.00,
     descricao: "Seleção luxuosa: Trufas douradas, camafeu de nozes e mini torteletes.",
+    imagem: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=900&q=85",
     emoji: "🎀",
     badge: "Presente VIP",
     rendimento: "16 unidades sortidas"
@@ -65,6 +71,7 @@ const CATALOGO_PADRAO = [
     categoria: "combos",
     preco: 170.00,
     descricao: "Bolo Clássico 1.5kg à sua escolha + 50 Brigadeiros Gourmet na caixa de presente.",
+    imagem: "https://images.unsplash.com/photo-1519869325930-281384150729?auto=format&fit=crop&w=900&q=85",
     emoji: "✨",
     badge: "Economize R$ 25",
     rendimento: "Ideal p/ 15 convidados"
@@ -75,6 +82,7 @@ const CATALOGO_PADRAO = [
     categoria: "combos",
     preco: 135.00,
     descricao: "Bolo aro 15 (1kg) + 25 docinhos gourmet variados em embalagem especial.",
+    imagem: "https://images.unsplash.com/photo-1535141192574-5d4897c12636?auto=format&fit=crop&w=900&q=85",
     emoji: "🥂",
     badge: "Intimista",
     rendimento: "Ideal p/ 8 a 10 convidados"

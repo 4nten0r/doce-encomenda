@@ -4,7 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Doce Encomenda | Alta Confeitaria & Pâtisserie</title>
-  
+
+  <!-- Aplica o tema salvo antes da primeira pintura (evita flash de tema errado) -->
+  <script>
+    document.documentElement.dataset.theme = localStorage.getItem('doce_encomenda_tema') === 'light' ? 'light' : 'dark';
+  </script>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
@@ -53,21 +58,39 @@
   <style>
     :root {
       color-scheme: dark;
+      --app-bg: #0e0514;
+      --app-ink: #fff8f0;
+      --app-muted: #b8a4bd;
+      --app-panel: rgba(36, 14, 48, 0.68);
+      --app-panel-solid: #241030;
+      --app-line: rgba(243, 186, 98, 0.18);
+      --app-grid: rgba(255, 255, 255, 0.035);
+    }
+
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --app-bg: #f8f3ee;
+      --app-ink: #291c25;
+      --app-muted: #776775;
+      --app-panel: rgba(255, 255, 255, 0.76);
+      --app-panel-solid: #fffaf6;
+      --app-line: rgba(126, 74, 61, 0.16);
+      --app-grid: rgba(126, 74, 61, 0.06);
     }
 
     body {
-      background-color: #0e0514;
+      background-color: var(--app-bg);
       background-image: 
         radial-gradient(circle at 15% 15%, rgba(225, 29, 72, 0.15) 0%, transparent 45%),
         radial-gradient(circle at 85% 25%, rgba(243, 186, 98, 0.14) 0%, transparent 40%),
-        radial-gradient(circle at 50% 80%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
-        linear-gradient(135deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        linear-gradient(180deg, #13061c 0%, #0a030f 100%);
+        linear-gradient(135deg, var(--app-grid) 1px, transparent 1px),
+        linear-gradient(180deg, color-mix(in srgb, var(--app-bg) 88%, white) 0%, var(--app-bg) 100%);
       background-size: auto, auto, auto, 34px 34px, auto;
       background-attachment: fixed;
-      color: #FFF8F0;
+      color: var(--app-ink);
       -webkit-tap-highlight-color: transparent;
       overflow-x: hidden;
+      transition: background-color 0.45s ease, color 0.45s ease;
     }
 
     body::before {
@@ -84,10 +107,10 @@
 
     /* Efeito Glassmorphism Sofisticado */
     .glass-panel {
-      background: rgba(36, 14, 48, 0.68);
+      background: var(--app-panel);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(243, 186, 98, 0.18);
+      border: 1px solid var(--app-line);
       box-shadow: 0 18px 44px -14px rgba(0, 0, 0, 0.65);
     }
 
@@ -139,12 +162,13 @@
     select, input { color-scheme: dark; }
 
     @media (max-width: 639px) {
-      body { justify-content: flex-start; padding: 0.75rem; }
-      body > aside { margin-bottom: 0.65rem; padding-inline: 0.15rem; }
+      body { justify-content: flex-start; padding: 0; }
+      body > aside { margin-bottom: 0; padding: 0.65rem 1rem; }
       body > aside a { min-height: 2.25rem; display: inline-flex; align-items: center; }
       #mainCard {
-        min-height: calc(100svh - 4.5rem);
-        border-radius: 1.75rem;
+        min-height: calc(100svh - 3.5rem);
+        border-radius: 0;
+        border-inline: 0;
       }
       #mainCard > header { padding: 1rem 1rem 0.85rem; }
       #mainCard > header h1 { font-size: 1.05rem; }
@@ -182,6 +206,35 @@
       visibility: visible;
       transform: translateY(0) scale(1);
     }
+
+    [data-theme="light"] .text-white { color: var(--app-ink) !important; }
+    [data-theme="light"] .text-brand-muted { color: var(--app-muted) !important; }
+    [data-theme="light"] .bg-brand-dark { background-color: var(--app-bg) !important; }
+    [data-theme="light"] .bg-brand-deep { background-color: var(--app-panel-solid) !important; }
+    [data-theme="light"] .bg-brand-surface { background-color: rgba(126, 74, 61, 0.08) !important; }
+    [data-theme="light"] .glass-input { background: rgba(255, 255, 255, 0.74); color: var(--app-ink); }
+    [data-theme="light"] .ticket-container { background: linear-gradient(160deg, #fffaf6 0%, #f4e9df 100%); }
+    [data-theme="light"] .ticket-container::before, [data-theme="light"] .ticket-container::after { background: var(--app-bg); }
+    [data-theme="light"] select, [data-theme="light"] input { color-scheme: light; }
+
+    .theme-toggle {
+      width: 2.5rem;
+      height: 2.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--app-line);
+      border-radius: 0.9rem;
+      color: #f3ba62;
+      background: var(--app-panel);
+      transition: transform 0.2s ease, background-color 0.25s ease;
+    }
+    .theme-toggle:hover { transform: translateY(-2px) rotate(8deg); }
+    .theme-toggle:active { transform: scale(0.92); }
+
+    .product-image { overflow: hidden; transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1); }
+    .product-image img { transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease; }
+    .group:hover .product-image img { transform: scale(1.08); filter: saturate(1.12); }
 
     /* Feedback Tátil Premium */
     .btn-touch {
@@ -260,9 +313,9 @@
       <span class="w-2 h-2 rounded-full bg-emerald-400 relative live-dot"></span>
       Alta Confeitaria &bull; Ateliê Gourmet
     </span>
-    <a href="admin.html" class="px-3 py-1 rounded-full bg-brand-surface border border-brand-border text-brand-gold hover:text-white hover:border-brand-gold transition-colors font-semibold flex items-center gap-1 btn-touch">
-      <span>👩‍🍳</span> Painel da Confeiteira &rarr;
-    </a>
+    <button id="themeToggle" type="button" class="theme-toggle" onclick="alternarTema()" aria-label="Alternar tema" title="Alternar tema">
+      <span id="themeIcon" aria-hidden="true">☾</span>
+    </button>
   </aside>
 
   <!-- CONTAINER PRINCIPAL DO PORTAL (ESTILO DISPOSITIVO LUXURY) -->
@@ -271,8 +324,8 @@
     <!-- CABEÇALHO ELEGANTE COM IDENTIDADE VISUAL -->
     <header class="px-6 pt-6 pb-4 flex items-center justify-between border-b border-brand-border/60 bg-brand-deep/50 backdrop-blur-md z-40">
       <div class="flex items-center gap-3">
-        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-brand-gold via-amber-600 to-brand-berry text-white flex items-center justify-center text-2xl shadow-glow-gold">
-          🧁
+        <div class="w-11 h-11 rounded-2xl overflow-hidden bg-brand-surface border border-brand-border shadow-glow-gold">
+          <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=180&q=85" alt="Bolo artesanal" class="w-full h-full object-cover">
         </div>
         <div>
           <h1 class="font-serif font-bold text-white text-xl tracking-tight leading-none flex items-center gap-1.5">
@@ -326,8 +379,8 @@
       <div id="splash" class="screen active-screen absolute inset-0 z-50 flex flex-col items-center justify-center bg-brand-dark/95 backdrop-blur-2xl text-white p-6 text-center">
         <div class="relative mb-5">
           <div class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-brand-gold via-brand-berry to-pink-500 p-0.5 shadow-glow-gold animate-pulse">
-            <div class="w-full h-full bg-brand-dark rounded-[22px] flex items-center justify-center text-5xl">
-              🧁
+            <div class="w-full h-full bg-brand-dark rounded-[22px] overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=260&q=85" alt="Bolo artesanal" class="w-full h-full object-cover">
             </div>
           </div>
         </div>
@@ -353,13 +406,13 @@
             Todos
           </button>
           <button onclick="filtrarCategoria('bolos')" data-cat="bolos" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-medium text-brand-muted hover:text-white bg-brand-surface border border-brand-border/40 whitespace-nowrap transition-all">
-            🎂 Bolos
+            Bolos
           </button>
           <button onclick="filtrarCategoria('doces')" data-cat="doces" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-medium text-brand-muted hover:text-white bg-brand-surface border border-brand-border/40 whitespace-nowrap transition-all">
-            🍫 Brigadeiros
+            Brigadeiros
           </button>
           <button onclick="filtrarCategoria('combos')" data-cat="combos" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-medium text-brand-muted hover:text-white bg-brand-surface border border-brand-border/40 whitespace-nowrap transition-all">
-            ✨ Combos
+            Combos
           </button>
         </div>
 
@@ -532,8 +585,8 @@
           <span class="text-[10px] font-bold text-emerald-400 tracking-widest uppercase bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
             Sinal Confirmado com Sucesso!
           </span>
-          <h2 class="text-2xl font-serif font-black text-white mt-2">Pedido na Produção!</h2>
-          <p class="text-brand-muted text-xs mt-1">Guarde este ticket de retirada para apresentar no ateliê.</p>
+          <h2 class="text-2xl font-serif font-black text-white mt-2">Pedido recebido!</h2>
+          <p class="text-brand-muted text-xs mt-1">A confeiteira confirmará o sinal antes de iniciar a produção.</p>
         </div>
         
         <!-- TICKET VIP COM RECORTES DE ALTA CONFEITARIA -->

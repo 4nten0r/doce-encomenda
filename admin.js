@@ -63,6 +63,8 @@ let receitaIngredientes = carregarReceitas();
 
 // Inicialização ao carregar a página
 document.addEventListener("DOMContentLoaded", () => {
+  aplicarTemaAdmin(localStorage.getItem('doce_encomenda_tema') || 'dark');
+
   const hoje = new Date().toISOString().split('T')[0];
   const inputData = document.getElementById("filtroDataAdmin");
   if (inputData) {
@@ -71,6 +73,25 @@ document.addEventListener("DOMContentLoaded", () => {
   
   carregarPedidosAdmin();
 });
+
+// ==========================================
+// TEMA CLARO/ESCURO (compartilhado com o portal)
+// ==========================================
+function aplicarTemaAdmin(tema) {
+  const temaAtual = tema === 'light' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = temaAtual;
+  localStorage.setItem('doce_encomenda_tema', temaAtual);
+
+  const icone = document.getElementById('themeIconAdmin');
+  const botao = document.getElementById('themeToggle');
+  if (icone) icone.textContent = temaAtual === 'light' ? '☀' : '☾';
+  if (botao) botao.setAttribute('aria-label', temaAtual === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro');
+}
+
+function alternarTemaAdmin() {
+  const temaAtual = document.documentElement.dataset.theme || 'dark';
+  aplicarTemaAdmin(temaAtual === 'light' ? 'dark' : 'light');
+}
 
 // Salvar no LocalStorage
 function salvarNoStorage() {

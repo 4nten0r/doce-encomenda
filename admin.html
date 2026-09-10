@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Doce Encomenda - Painel da Confeiteira (Admin)</title>
+
+  <!-- Aplica o tema salvo antes da primeira pintura (evita flash de tema errado) -->
+  <script>
+    document.documentElement.dataset.theme = localStorage.getItem('doce_encomenda_tema') === 'light' ? 'light' : 'dark';
+  </script>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -112,6 +118,115 @@
     .card-touch:active {
       transform: scale(0.98);
     }
+
+    .theme-toggle {
+      width: 2.4rem;
+      height: 2.4rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: 0.9rem;
+      font-size: 1rem;
+      color: var(--accent);
+      background: rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.25s ease, border-color 0.25s ease;
+    }
+    .theme-toggle:hover {
+      background: rgba(226, 149, 120, 0.16);
+      border-color: rgba(226, 149, 120, 0.45);
+      transform: translateY(-2px) rotate(10deg);
+    }
+    .theme-toggle:active {
+      transform: scale(0.9);
+    }
+
+    /* ============ TEMA CLARO ============ */
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --primary: #c25538;
+      --accent: #a05a3d;
+      --bg-off: #f7f1e9;
+      --card-bg: rgba(255, 255, 255, 0.82);
+      --ok: #0f9d70;
+      --bad: #d84f77;
+      --ink-soft: #6f5f66;
+      --line: rgba(140, 74, 50, 0.16);
+    }
+
+    [data-theme="light"] body {
+      background-color: var(--bg-off);
+      color: #2b1e26;
+      background-image:
+        radial-gradient(circle at 8% 0%, rgba(226, 149, 120, 0.22), transparent 31rem),
+        radial-gradient(circle at 92% 12%, rgba(15, 157, 112, 0.10), transparent 28rem),
+        linear-gradient(135deg, rgba(140, 74, 50, 0.05) 1px, transparent 1px),
+        linear-gradient(45deg, rgba(140, 74, 50, 0.035) 1px, transparent 1px);
+      background-size: auto, auto, 36px 36px, 36px 36px;
+    }
+
+    [data-theme="light"] .glass-panel {
+      background: rgba(255, 255, 255, 0.85);
+      border-color: rgba(140, 74, 50, 0.15);
+      box-shadow: 0 14px 34px rgba(140, 74, 50, 0.12);
+    }
+    [data-theme="light"] header.glass-panel {
+      background: rgba(255, 250, 245, 0.92);
+      border-color: rgba(140, 74, 50, 0.15);
+    }
+    [data-theme="light"] .glass-input {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(140, 74, 50, 0.22);
+      color: #2b1e26;
+    }
+    [data-theme="light"] .glass-input:focus {
+      background: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(194, 85, 56, 0.14);
+    }
+    [data-theme="light"] .theme-toggle {
+      color: var(--primary);
+      background: rgba(140, 74, 50, 0.06);
+    }
+    [data-theme="light"] .theme-toggle:hover {
+      background: rgba(194, 85, 56, 0.12);
+      border-color: rgba(194, 85, 56, 0.4);
+    }
+
+    /* Textos utilitários do Tailwind adaptados ao tema claro */
+    [data-theme="light"] .text-white { color: #2b1e26 !important; }
+    [data-theme="light"] .text-slate-200 { color: #4a3941 !important; }
+    [data-theme="light"] .text-slate-300 { color: #55424b !important; }
+    [data-theme="light"] .text-slate-400 { color: #7c6a72 !important; }
+    [data-theme="light"] .text-slate-500 { color: #8a7680 !important; }
+    [data-theme="light"] .text-emerald-200,
+    [data-theme="light"] .text-emerald-300 { color: #047857 !important; }
+    [data-theme="light"] .text-amber-300,
+    [data-theme="light"] .text-amber-400 { color: #b45309 !important; }
+    [data-theme="light"] .text-rose-200,
+    [data-theme="light"] .text-rose-300 { color: #be123c !important; }
+    [data-theme="light"] .text-sky-200,
+    [data-theme="light"] .text-sky-300 { color: #0369a1 !important; }
+    [data-theme="light"] .text-\[\#E29578\] { color: #a35438 !important; }
+
+    /* Superfícies escuras utilitárias adaptadas ao tema claro */
+    [data-theme="light"] .bg-slate-900 { background-color: #ffffff !important; color: #2b1e26 !important; }
+    [data-theme="light"] .bg-slate-800 { background-color: rgba(140, 74, 50, 0.10) !important; color: #2b1e26 !important; }
+    [data-theme="light"] .bg-slate-900\/80 { background-color: rgba(255, 255, 255, 0.92) !important; }
+    [data-theme="light"] .bg-slate-900\/90 { background-color: rgba(255, 255, 255, 0.95) !important; }
+    [data-theme="light"] .bg-black\/15 { background-color: rgba(140, 74, 50, 0.05) !important; }
+    [data-theme="light"] .bg-black\/70 { background-color: rgba(59, 41, 33, 0.38) !important; }
+    [data-theme="light"] .border-white\/5,
+    [data-theme="light"] .border-white\/10 { border-color: rgba(140, 74, 50, 0.14) !important; }
+    [data-theme="light"] .hover\:text-white:hover { color: #2b1e26 !important; }
+    [data-theme="light"] select,
+    [data-theme="light"] input,
+    [data-theme="light"] textarea { color-scheme: light; }
+
+    body {
+      transition: background-color 0.45s ease, color 0.45s ease;
+    }
   </style>
 </head>
 
@@ -131,6 +246,9 @@
     </div>
 
     <div class="flex items-center gap-2">
+      <button id="themeToggle" type="button" class="theme-toggle" onclick="alternarTemaAdmin()" aria-label="Alternar tema" title="Alternar tema">
+        <span id="themeIconAdmin" aria-hidden="true">☾</span>
+      </button>
       <button onclick="abrirModalCatalogo()" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-200 text-xs font-bold border border-emerald-400/25 card-touch flex items-center gap-1">
         <span>✦</span> Cardápio & Receitas
       </button>
