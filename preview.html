@@ -1,81 +1,176 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Netinha Gourmet | Painel Corporativo de Confeitaria</title>
-  <!-- Tailwind CSS -->
+  <title>Netinha Gourmet | Painel da Confeiteira</title>
+
+  <!-- Tailwind CSS CDN com suporte a tema customizado -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['selector', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: 'var(--color-primary)',
+              primaryHover: 'var(--color-primary-hover)',
+              bg: 'var(--color-background)',
+              surface: 'var(--color-surface)',
+              surfaceSubtle: 'var(--color-surface-subtle)',
+              border: 'var(--color-border)',
+              text: 'var(--color-text)',
+              muted: 'var(--color-muted)',
+              success: 'var(--color-success)',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+
   <style>
+    :root {
+      color-scheme: light;
+      --color-background: #FFF7F1;
+      --color-surface: #FFFFFF;
+      --color-surface-subtle: #FDF4ED;
+      --color-primary: #C84328;
+      --color-primary-hover: #AE351F;
+      --color-text: #452416;
+      --color-muted: #9A6E5D;
+      --color-border: #EBD5C4;
+      --color-success: #16A34A;
+      --color-card-shadow: 0 4px 16px -2px rgba(69, 36, 22, 0.06);
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --color-background: #18100C;
+      --color-surface: #241712;
+      --color-surface-subtle: #2F1E18;
+      --color-primary: #E25A3C;
+      --color-primary-hover: #F06E52;
+      --color-text: #FFF5EE;
+      --color-muted: #D3B7A8;
+      --color-border: #4D3328;
+      --color-success: #22C55E;
+      --color-card-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.45);
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--color-background);
+      color: var(--color-text);
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .brand-card {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      box-shadow: var(--color-card-shadow);
     }
   </style>
-</head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
 
-  <div class="flex min-h-screen bg-slate-50 font-sans">
+  <script>
+    // Inicialização do tema salvo
+    const temaSalvo = localStorage.getItem('doce_encomenda_tema') || 'light';
+    document.documentElement.dataset.theme = temaSalvo;
+  </script>
+</head>
+<body class="min-h-screen antialiased flex flex-col">
+
+  <div class="flex min-h-screen w-full relative">
     
-    <!-- SIDEBAR -->
-    <aside class="w-64 min-h-screen bg-white border-r border-slate-200/80 flex flex-col justify-between shrink-0 select-none">
+    <!-- SIDEBAR RETRÁTIL -->
+    <aside id="sidebarAdmin" class="w-64 bg-brand-surface border-r border-brand-border flex flex-col justify-between shrink-0 select-none transition-all duration-300 ease-in-out z-40">
       <div>
         <!-- Brand Header -->
-        <div class="h-20 flex items-center px-6 border-b border-slate-100 gap-3">
-          <div class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-white shadow-sm font-semibold tracking-wider text-sm">
-            NG
+        <div class="h-20 flex items-center justify-between px-5 border-b border-brand-border/60">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 rounded-xl bg-brand-primary flex items-center justify-center text-white shadow-sm font-black tracking-wider text-sm shrink-0">
+              NG
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="font-bold text-brand-text text-sm tracking-tight truncate">
+                Netinha Gourmet
+              </span>
+              <span class="text-[10px] font-bold text-brand-primary uppercase tracking-wider">
+                Painel da Confeiteira
+              </span>
+            </div>
           </div>
-          <div class="flex flex-col">
-            <span class="font-semibold text-slate-900 text-sm tracking-tight leading-none">
-              Netinha Gourmet
-            </span>
-            <span class="text-[11px] font-medium text-slate-400 mt-1 flex items-center gap-1">
-              <i data-lucide="sparkles" class="w-3 h-3 text-amber-500"></i> Confeitaria Premium
-            </span>
-          </div>
+          <!-- Botão para recolher no mobile/desktop -->
+          <button type="button" onclick="toggleSidebar()" class="lg:hidden p-1.5 text-brand-muted hover:text-brand-text rounded-lg hover:bg-brand-surfaceSubtle">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
         </div>
 
         <!-- Navigation Section -->
-        <div class="px-3 py-6">
-          <p class="px-3 text-[11px] font-semibold tracking-wider text-slate-400 uppercase mb-2">
-            Gestão Operacional
+        <div class="px-3 py-5">
+          <p class="px-3 text-[10px] font-extrabold tracking-widest text-brand-muted/80 uppercase mb-2">
+            Módulos Operacionais
           </p>
-          <nav class="space-y-1">
-            <button class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium bg-slate-900 text-white shadow-sm shadow-slate-900/10">
+          <nav class="space-y-1" id="navSidebar">
+            <button
+              onclick="navegarPara('dashboard')"
+              data-tab="dashboard"
+              class="tab-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all bg-brand-primary text-white shadow-sm"
+            >
               <div class="flex items-center gap-3">
-                <i data-lucide="layout-dashboard" class="w-4 h-4 text-white"></i>
-                <span>Painel Geral</span>
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                <span>Painel Geral & Esteira</span>
               </div>
             </button>
-            <button class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition-colors">
+
+            <button
+              onclick="navegarPara('catalog')"
+              data-tab="catalog"
+              class="tab-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-brand-muted hover:text-brand-text hover:bg-brand-surfaceSubtle transition-all"
+            >
               <div class="flex items-center gap-3">
-                <i data-lucide="shopping-bag" class="w-4 h-4 text-slate-400"></i>
-                <span>Pedidos & Esteira</span>
-              </div>
-              <span id="badgeContadorSidebar" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">4</span>
-            </button>
-            <button class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition-colors">
-              <div class="flex items-center gap-3">
-                <i data-lucide="cake" class="w-4 h-4 text-slate-400"></i>
+                <i data-lucide="cake" class="w-4 h-4"></i>
                 <span>Cardápio & Receitas</span>
               </div>
             </button>
-            <button class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition-colors">
+
+            <button
+              onclick="navegarPara('schedule')"
+              data-tab="schedule"
+              class="tab-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-brand-muted hover:text-brand-text hover:bg-brand-surfaceSubtle transition-all"
+            >
               <div class="flex items-center gap-3">
-                <i data-lucide="calendar-check" class="w-4 h-4 text-slate-400"></i>
+                <i data-lucide="calendar-check" class="w-4 h-4"></i>
                 <span>Agenda de Retirada</span>
               </div>
+              <span id="badgeAgendaSidebar" class="text-[10px] font-black px-2 py-0.5 rounded-full bg-brand-surfaceSubtle text-brand-primary border border-brand-border">0</span>
             </button>
-            <button class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition-colors">
+
+            <button
+              onclick="navegarPara('clients')"
+              data-tab="clients"
+              class="tab-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-brand-muted hover:text-brand-text hover:bg-brand-surfaceSubtle transition-all"
+            >
               <div class="flex items-center gap-3">
-                <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
+                <i data-lucide="users" class="w-4 h-4"></i>
                 <span>Clientes VIP</span>
               </div>
             </button>
-            <button class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition-colors">
+
+            <button
+              onclick="navegarPara('analytics')"
+              data-tab="analytics"
+              class="tab-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-brand-muted hover:text-brand-text hover:bg-brand-surfaceSubtle transition-all"
+            >
               <div class="flex items-center gap-3">
-                <i data-lucide="bar-chart-3" class="w-4 h-4 text-slate-400"></i>
+                <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
                 <span>Relatórios Financeiros</span>
               </div>
             </button>
@@ -83,277 +178,590 @@
         </div>
       </div>
 
-      <!-- User Footer Profile -->
-      <div class="p-4 border-t border-slate-100">
-        <div class="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors">
-          <div class="flex items-center gap-3 min-w-0">
-            <div class="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-700 shrink-0">
-              AD
+      <!-- User Footer Profile & Atalho Cliente -->
+      <div class="p-4 border-t border-brand-border/60 space-y-2">
+        <a
+          href="index.html"
+          class="w-full py-2.5 px-3 rounded-xl bg-brand-surfaceSubtle hover:bg-brand-surface border border-brand-border text-brand-text text-xs font-bold flex items-center justify-center gap-2 transition-colors"
+          title="Ver o app como cliente"
+        >
+          <i data-lucide="store" class="w-3.5 h-3.5 text-brand-primary"></i>
+          <span>Abrir Portal do Cliente</span>
+        </a>
+
+        <div class="flex items-center justify-between p-2 rounded-xl bg-brand-surfaceSubtle/60 border border-brand-border/40">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary flex items-center justify-center text-xs font-black shrink-0">
+              NG
             </div>
             <div class="flex flex-col min-w-0">
-              <span class="text-xs font-semibold text-slate-800 truncate">
-                Administração
+              <span class="text-xs font-bold text-brand-text truncate">
+                Confeiteira Chefe
               </span>
-              <span class="text-[11px] text-slate-400 truncate">
-                confeitaria@netinha.com
+              <span class="text-[10px] text-brand-muted truncate">
+                Netinha Gourmet
               </span>
             </div>
           </div>
-          <button type="button" class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors" title="Sair do painel">
-            <i data-lucide="log-out" class="w-4 h-4"></i>
-          </button>
         </div>
       </div>
     </aside>
 
-    <!-- MAIN CONTENT AREA -->
+    <!-- ÁREA DE CONTEÚDO PRINCIPAL -->
     <div class="flex-1 flex flex-col min-w-0">
       
-      <!-- TOPBAR -->
-      <header class="h-20 bg-white border-b border-slate-200/80 px-8 flex items-center justify-between sticky top-0 z-30">
-        <div class="flex items-center gap-4 flex-1 max-w-xl">
+      <!-- TOPBAR FIXA -->
+      <header class="h-20 bg-brand-surface border-b border-brand-border px-5 sm:px-8 flex items-center justify-between sticky top-0 z-30 transition-colors">
+        
+        <!-- Toggle Sidebar & Busca -->
+        <div class="flex items-center gap-3 sm:gap-4 flex-1 max-w-xl">
+          <button
+            type="button"
+            onclick="toggleSidebar()"
+            class="p-2.5 rounded-xl border border-brand-border text-brand-text hover:bg-brand-surfaceSubtle transition-colors flex items-center justify-center"
+            title="Mostrar / Ocultar Menu Lateral"
+          >
+            <i data-lucide="panel-left" class="w-4 h-4"></i>
+          </button>
+
           <div class="relative w-full max-w-md">
-            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            <i data-lucide="search" class="w-4 h-4 text-brand-muted absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
             <input
               type="text"
-              id="inputBusca"
+              id="inputBuscaGeral"
               oninput="aoDigitarBusca(event)"
-              placeholder="Buscar por cliente, código (#DOCE-000) ou item..."
-              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/70 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition-all"
+              placeholder="Buscar cliente, pedido (#DOCE-000) ou item..."
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-brand-border bg-brand-surfaceSubtle text-xs text-brand-text placeholder:text-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-primary/30 transition-all font-medium"
             />
-          </div>
-
-          <div class="hidden lg:flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-50 border border-slate-200/70 text-slate-600 text-xs font-medium">
-            <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i>
-            <span id="labelDataHoje">Hoje</span>
           </div>
         </div>
 
-        <div class="flex items-center gap-3">
-          <button type="button" class="relative p-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors" title="Notificações">
-            <i data-lucide="bell" class="w-4 h-4"></i>
-            <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white"></span>
-          </button>
+        <!-- Ações do Cabeçalho & Botão de Modo Escuro -->
+        <div class="flex items-center gap-2.5">
+          <!-- Data do dia -->
+          <div class="hidden xl:flex items-center gap-2 px-3 py-2 rounded-xl bg-brand-surfaceSubtle border border-brand-border text-brand-muted text-xs font-bold">
+            <i data-lucide="calendar" class="w-3.5 h-3.5 text-brand-primary"></i>
+            <span id="labelDataHoje">Hoje</span>
+          </div>
 
-          <button type="button" class="p-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors hidden sm:flex items-center gap-2 text-xs font-medium">
-            <i data-lucide="sliders-horizontal" class="w-4 h-4 text-slate-500"></i>
-            <span>Filtros</span>
-          </button>
-
+          <!-- Botão Modo Claro / Escuro -->
           <button
             type="button"
-            onclick="adicionarNovoPedido()"
-            class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition-all active:scale-[0.98]"
+            onclick="alternarTemaGeral()"
+            id="btnToggleTema"
+            class="p-2.5 rounded-xl border border-brand-border text-brand-text hover:bg-brand-surfaceSubtle transition-all"
+            title="Alternar entre Modo Claro e Escuro"
+          >
+            <i data-lucide="moon" id="iconTema" class="w-4 h-4"></i>
+          </button>
+
+          <!-- Botão de Novo Pedido -->
+          <button
+            type="button"
+            onclick="abrirModalNovoPedido()"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-primary hover:bg-brand-primaryHover text-white text-xs font-bold shadow-sm transition-all active:scale-[0.98]"
           >
             <i data-lucide="plus" class="w-4 h-4"></i>
-            <span>Novo Pedido</span>
+            <span class="hidden sm:inline">Novo Pedido</span>
           </button>
         </div>
       </header>
 
-      <!-- DASHBOARD BODY -->
-      <main class="p-8 max-w-7xl w-full mx-auto space-y-8">
+      <!-- CORPO DAS TELAS CORRESPONDENTES -->
+      <main class="p-4 sm:p-8 max-w-7xl w-full mx-auto space-y-6 flex-1">
         
-        <!-- Header Info -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 class="text-xl font-bold text-slate-900 tracking-tight">
-              Painel de Operações & Esteira
-            </h1>
-            <p class="text-xs text-slate-500 mt-1">
-              Monitore o fluxo de encomendas, faturamento diário e liberação de insumos.
-            </p>
+        <!-- ============================================ -->
+        <!-- ABA 1: PAINEL GERAL & ESTEIRA KANBAN -->
+        <!-- ============================================ -->
+        <div id="view-dashboard" class="tab-view space-y-6">
+          <!-- Título da Seção -->
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h1 class="text-xl font-serif font-black text-brand-text tracking-tight">
+                Fluxo de Produção & Esteira
+              </h1>
+              <p class="text-xs text-brand-muted mt-0.5">
+                Organização lateral com movimentação de encomendas entre etapas da confeitaria.
+              </p>
+            </div>
+            <div class="flex items-center gap-2 text-xs font-bold text-brand-muted">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Sincronizado com pedidos dos clientes</span>
+            </div>
           </div>
 
-          <div class="flex items-center gap-3">
+          <!-- LINHA DE CARDS DE KPI -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="kpiContainer">
+            <!-- Renderizado via JS -->
+          </div>
+
+          <!-- ESTEIRA KANBAN COM FLUXO LATERAL -->
+          <section class="space-y-3 pt-2">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-xs font-black uppercase tracking-wider text-brand-primary">
+                  Etapas da Esteira
+                </h2>
+                <p class="text-[11px] text-brand-muted">
+                  Avance cada encomenda conforme o preparo artesanal é concluído.
+                </p>
+              </div>
+            </div>
+
+            <!-- Colunas Laterais Kanban (com scroll horizontal em telas menores) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 overflow-x-auto pb-4 no-scrollbar" id="kanbanContainer">
+              <!-- Colunas geradas dinamicamente -->
+            </div>
+          </section>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- ABA 2: CARDÁPIO & RECEITAS -->
+        <!-- ============================================ -->
+        <div id="view-catalog" class="tab-view hidden space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h1 class="text-xl font-serif font-black text-brand-text tracking-tight">
+                Cardápio & Fichas Técnicas
+              </h1>
+              <p class="text-xs text-brand-muted mt-0.5">
+                Produtos cadastrados, rendimentos, precificação e ingredientes de cada receita.
+              </p>
+            </div>
             <button
               type="button"
-              onclick="exportarRelatorio()"
-              class="px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-2 shadow-sm transition-colors"
+              onclick="abrirModalNovoProduto()"
+              class="px-4 py-2.5 bg-brand-primary hover:bg-brand-primaryHover text-white text-xs font-bold rounded-xl shadow-sm flex items-center gap-2 self-start"
             >
-              <i data-lucide="download" class="w-3.5 h-3.5 text-slate-500"></i>
-              <span>Exportar Relatório</span>
+              <i data-lucide="plus" class="w-4 h-4"></i>
+              <span>Cadastrar Novo Doce/Bolo</span>
             </button>
+          </div>
+
+          <!-- Tabela de Produtos Cadastrados -->
+          <div class="brand-card rounded-2xl overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-brand-surfaceSubtle text-brand-muted uppercase text-[10px] tracking-wider border-b border-brand-border">
+                  <tr>
+                    <th class="p-4 font-black">Produto</th>
+                    <th class="p-4 font-black">Categoria</th>
+                    <th class="p-4 font-black">Preço</th>
+                    <th class="p-4 font-black">Rendimento</th>
+                    <th class="p-4 font-black">Receita Base</th>
+                    <th class="p-4 font-black text-right">Ação</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaCatalogoCorpo" class="divide-y divide-brand-border/60">
+                  <!-- Preenchido via JS -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
-        <!-- KPI CARDS ROW -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="kpiContainer">
-          <!-- Renderizado via JS -->
+        <!-- ============================================ -->
+        <!-- ABA 3: AGENDA DE RETIRADAS -->
+        <!-- ============================================ -->
+        <div id="view-schedule" class="tab-view hidden space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h1 class="text-xl font-serif font-black text-brand-text tracking-tight">
+                Agenda de Retiradas
+              </h1>
+              <p class="text-xs text-brand-muted mt-0.5">
+                Organização por janelas de horário para separação antecipada dos pedidos.
+              </p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input
+                type="date"
+                id="filtroDataAgenda"
+                onchange="filtrarAgendaPorData(event)"
+                class="p-2.5 rounded-xl border border-brand-border bg-brand-surfaceSubtle text-xs font-bold text-brand-text outline-none cursor-pointer"
+              />
+            </div>
+          </div>
+
+          <!-- Janelas de Horário -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5" id="gradeAgendaJanelas">
+            <!-- Gerado via JS: Manhã, Tarde, Fim de Tarde -->
+          </div>
         </div>
 
-        <!-- KANBAN PIPELINE -->
-        <section class="space-y-4">
+        <!-- ============================================ -->
+        <!-- ABA 4: CLIENTES VIP -->
+        <!-- ============================================ -->
+        <div id="view-clients" class="tab-view hidden space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h1 class="text-xl font-serif font-black text-brand-text tracking-tight">
+                Diretório de Clientes VIP
+              </h1>
+              <p class="text-xs text-brand-muted mt-0.5">
+                Histórico consolidado de pedidos, valores investidos e contato direto no WhatsApp.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="cardsClientesVIP">
+            <!-- Gerado via JS -->
+          </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- ABA 5: RELATÓRIOS FINANCEIROS -->
+        <!-- ============================================ -->
+        <div id="view-analytics" class="tab-view hidden space-y-6">
           <div>
-            <h2 class="text-sm font-bold text-slate-900 tracking-tight">
-              Status da Produção
-            </h2>
-            <p class="text-[11px] text-slate-500">
-              Arraste ou avance os pedidos conforme a esteira artesanal progride.
+            <h1 class="text-xl font-serif font-black text-brand-text tracking-tight">
+              Demonstrativo Financeiro & Caixa
+            </h1>
+            <p class="text-xs text-brand-muted mt-0.5">
+              Controle dos sinais de 50% pagos via PIX e saldo restante a receber na entrega.
             </p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5" id="kanbanContainer">
-            <!-- Colunas Kanban renderizadas via JS -->
+          <!-- Métricas Financeiras -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="metricasFinanceirasContainer">
+            <!-- Gerado via JS -->
           </div>
-        </section>
+
+          <!-- Tabela de Movimentação de Caixa -->
+          <div class="brand-card p-6 rounded-2xl space-y-4">
+            <h3 class="font-serif font-bold text-base text-brand-text">
+              Demonstrativo por Pedido
+            </h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-brand-surfaceSubtle text-brand-muted uppercase text-[10px] tracking-wider border-b border-brand-border">
+                  <tr>
+                    <th class="p-3 font-black">Código</th>
+                    <th class="p-3 font-black">Cliente</th>
+                    <th class="p-3 font-black">Total</th>
+                    <th class="p-3 font-black">Sinal Pago (50%)</th>
+                    <th class="p-3 font-black">Restante na Entrega</th>
+                    <th class="p-3 font-black">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaFinanceiraCorpo" class="divide-y divide-brand-border/60">
+                  <!-- Gerado via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
 
       </main>
     </div>
   </div>
 
+  <!-- ============================================ -->
+  <!-- MODAL: NOVO PEDIDO MANUAL -->
+  <!-- ============================================ -->
+  <div id="modalNovoPedido" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="brand-card p-6 rounded-3xl max-w-md w-full border border-brand-border shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-brand-border/60">
+        <h3 class="text-base font-serif font-bold text-brand-text">
+          Cadastrar Pedido na Esteira
+        </h3>
+        <button onclick="fecharModalNovoPedido()" class="p-1 rounded-lg text-brand-muted hover:text-brand-text">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <form onsubmit="salvarNovoPedidoManual(event)" class="space-y-3.5 text-xs">
+        <div>
+          <label class="block font-bold text-brand-text uppercase text-[10px] tracking-wider mb-1">Nome do Cliente</label>
+          <input type="text" id="formClienteNome" required placeholder="Ex: Juliana Mendes" class="w-full p-2.5 rounded-xl border border-brand-border bg-brand-surfaceSubtle text-brand-text outline-none font-medium">
+        </div>
+
+        <div>
+          <label class="block font-bold text-brand-text uppercase text-[10px] tracking-wider mb-1">WhatsApp</label>
+          <input type="tel" id="formClienteWhats" required placeholder="(11) 98888-7777" class="w-full p-2.5 rounded-xl border border-brand-border bg-brand-surfaceSubtle text-brand-text outline-none font-medium">
+        </div>
+
+        <div>
+          <label class="block font-bold text-brand-text uppercase text-[10px] tracking-wider mb-1">Produto Desejado</label>
+          <select id="formProdutoSelect" class="w-full p-2.5 rounded-xl border border-brand-border bg-brand-surfaceSubtle text-brand-text outline-none font-medium">
+            <!-- Preenchido via JS -->
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-brand-text uppercase text-[10px] tracking-wider mb-1">Data Retirada</label>
+            <input type="date" id="formDataRetirada" required class="w-full p-2.5 rounded-xl border border-brand-border bg-brand-surfaceSubtle text-brand-text outline-none font-medium cursor-pointer">
+          </div>
+          <div>
+            <label class="block font-bold text-brand-text uppercase text-[10px] tracking-wider mb-1">Janela</label>
+            <select id="formJanelaHorario" class="w-full p-2.5 rounded-xl border border-brand-border bg-brand-surfaceSubtle text-brand-text outline-none font-medium">
+              <option value="Manhã (10h - 12h)">Manhã (10h - 12h)</option>
+              <option value="Tarde (14h - 16h30)" selected>Tarde (14h - 16h30)</option>
+              <option value="Fim de Tarde (17h - 19h)">Fim de Tarde (17h - 19h)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pt-2 flex gap-2">
+          <button type="button" onclick="fecharModalNovoPedido()" class="flex-1 py-2.5 rounded-xl border border-brand-border text-brand-muted hover:text-brand-text font-bold">
+            Cancelar
+          </button>
+          <button type="submit" class="flex-1 py-2.5 rounded-xl bg-brand-primary hover:bg-brand-primaryHover text-white font-bold shadow-sm">
+            Adicionar na Esteira
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SCRIPT DE COMPORTAMENTO, TEMAS E CORRESPONDÊNCIA DE ABAS -->
   <script>
-    // Estado do App
-    let pedidos = [
-      {
-        id: '#DOCE-4081',
-        clientName: 'Fernanda Lima Alencar',
-        clientPhone: '(11) 98765-4321',
-        items: [
-          { name: 'Bolo Clássico Ninho c/ Morangos (1.5kg)', quantity: 1, price: 120.00 }
-        ],
-        totalAmount: 120.00,
-        depositAmount: 60.00,
-        remainingAmount: 60.00,
-        status: 'Em Produção',
-        pickupDate: '2026-11-10',
-        pickupWindow: 'Manhã (10h - 12h)',
-      },
-      {
-        id: '#DOCE-4082',
-        clientName: 'Beatriz Vasconcelos',
-        clientPhone: '(11) 97123-8899',
-        items: [
-          { name: 'Balas de Coco Recheadas Gourmet (500g)', quantity: 2, price: 55.00 },
-          { name: 'Caixa 50 Brigadeiros Belga Nobre', quantity: 1, price: 75.00 }
-        ],
-        totalAmount: 185.00,
-        depositAmount: 92.50,
-        remainingAmount: 92.50,
-        status: 'Aguardando Sinal',
-        pickupDate: '2026-11-10',
-        pickupWindow: 'Tarde (14h - 16h30)',
-      },
-      {
-        id: '#DOCE-4083',
-        clientName: 'Rodrigo Fontes',
-        clientPhone: '(11) 99442-1100',
-        items: [
-          { name: 'Bolo Red Velvet Nobre (1.5kg)', quantity: 1, price: 140.00 }
-        ],
-        totalAmount: 140.00,
-        depositAmount: 70.00,
-        remainingAmount: 70.00,
-        status: 'Pronto p/ Retirar',
-        pickupDate: '2026-11-09',
-        pickupWindow: 'Fim de Tarde (17h - 19h)',
-      },
-      {
-        id: '#DOCE-4084',
-        clientName: 'Camila Guimarães',
-        clientPhone: '(11) 98112-9090',
-        items: [
-          { name: 'Combo Festa Completa', quantity: 1, price: 170.00 }
-        ],
-        totalAmount: 170.00,
-        depositAmount: 85.00,
-        remainingAmount: 85.00,
-        status: 'Concluído',
-        pickupDate: '2026-11-09',
-        pickupWindow: 'Manhã (10h - 12h)',
-      }
+    // ----------------------------------------------------
+    // BASE DE DADOS SINCRONIZADA COM LOCALSTORAGE
+    // ----------------------------------------------------
+    const PRODUTOS_PADRAO = [
+      { id: "p1", nome: "Bolo Clássico Ninho c/ Morangos (1.5kg)", categoria: "bolos", preco: 120.00, rendimento: "Serve até 15 pessoas", receita: "3 latas Leite Condensado, 0.5kg Trigo, 4 Ovos, 200g Manteiga" },
+      { id: "p2", nome: "Bolo Red Velvet Nobre (1.5kg)", categoria: "bolos", preco: 140.00, rendimento: "Serve até 15 pessoas", receita: "2 potes Cream Cheese, 0.5kg Trigo, 100g Cacau, 300g Açúcar" },
+      { id: "p3", nome: "Bolo Pistache & Frutas Vermelhas (1.5kg)", categoria: "bolos", preco: 160.00, rendimento: "Serve até 15 pessoas", receita: "200g Pasta de Pistache, 4 Ovos, Geléia Artesanal" },
+      { id: "p4", nome: "Caixa 50 Brigadeiros Belga Nobre", categoria: "doces", preco: 75.00, rendimento: "50 unidades", receita: "4 latas Leite Condensado, 150g Callebaut, 200g Granulado Belga" },
+      { id: "p5", nome: "Cento de Brigadeiros Tradicionais", categoria: "doces", preco: 90.00, rendimento: "100 unidades", receita: "8 latas Leite Condensado, 200g Cacau, 300g Granulado" },
+      { id: "p9", nome: "Balas de Coco Recheadas Gourmet (500g)", categoria: "balas", preco: 55.00, rendimento: "Aprox. 40 unidades", receita: "1kg Açúcar Cristal, 200ml Leite de Coco Puro, Recheio Ninho" },
+      { id: "p10", nome: "Balas de Coco Tradicionais de Festa (500g)", categoria: "balas", preco: 42.00, rendimento: "Aprox. 50 unidades", receita: "1kg Açúcar Cristal, 250ml Leite de Coco Artesanal" }
     ];
 
-    let busca = '';
+    function carregarPedidosArmazenados() {
+      try {
+        const salvos = localStorage.getItem('doce_encomenda_pedidos');
+        if (salvos) {
+          const parsed = JSON.parse(salvos);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {}
 
-    const COLUNAS = [
-      { id: 'Aguardando Sinal', label: 'Aguardando Sinal', corBadge: 'border-amber-500/20 bg-amber-50/50 text-amber-800', dot: 'bg-amber-500' },
-      { id: 'Em Produção', label: 'Em Produção', corBadge: 'border-blue-500/20 bg-blue-50/50 text-blue-800', dot: 'bg-blue-600' },
-      { id: 'Pronto p/ Retirar', label: 'Pronto p/ Retirar', corBadge: 'border-emerald-500/20 bg-emerald-50/50 text-emerald-800', dot: 'bg-emerald-600' },
-      { id: 'Concluído', label: 'Concluído', corBadge: 'border-slate-300 bg-slate-100/60 text-slate-700', dot: 'bg-slate-400' },
+      // Pedidos modelo caso ainda não existam
+      const hoje = new Date().toISOString().split('T')[0];
+      return [
+        {
+          id: '#DOCE-4081',
+          clientName: 'Fernanda Lima Alencar',
+          clientPhone: '(11) 98765-4321',
+          items: [{ name: 'Bolo Clássico Ninho c/ Morangos (1.5kg)', quantity: 1, price: 120.00 }],
+          totalAmount: 120.00,
+          depositAmount: 60.00,
+          remainingAmount: 60.00,
+          status: 'Em Produção',
+          pickupDate: hoje,
+          pickupWindow: 'Manhã (10h - 12h)'
+        },
+        {
+          id: '#DOCE-4082',
+          clientName: 'Beatriz Vasconcelos',
+          clientPhone: '(11) 97123-8899',
+          items: [
+            { name: 'Balas de Coco Recheadas Gourmet (500g)', quantity: 2, price: 55.00 },
+            { name: 'Caixa 50 Brigadeiros Belga Nobre', quantity: 1, price: 75.00 }
+          ],
+          totalAmount: 185.00,
+          depositAmount: 92.50,
+          remainingAmount: 92.50,
+          status: 'Aguardando Sinal',
+          pickupDate: hoje,
+          pickupWindow: 'Tarde (14h - 16h30)'
+        },
+        {
+          id: '#DOCE-4083',
+          clientName: 'Rodrigo Fontes',
+          clientPhone: '(11) 99442-1100',
+          items: [{ name: 'Bolo Red Velvet Nobre (1.5kg)', quantity: 1, price: 140.00 }],
+          totalAmount: 140.00,
+          depositAmount: 70.00,
+          remainingAmount: 70.00,
+          status: 'Pronto p/ Retirar',
+          pickupDate: hoje,
+          pickupWindow: 'Fim de Tarde (17h - 19h)'
+        },
+        {
+          id: '#DOCE-4084',
+          clientName: 'Camila Guimarães',
+          clientPhone: '(11) 98112-9090',
+          items: [{ name: 'Cento de Brigadeiros Tradicionais', quantity: 1, price: 90.00 }],
+          totalAmount: 90.00,
+          depositAmount: 45.00,
+          remainingAmount: 45.00,
+          status: 'Concluído',
+          pickupDate: hoje,
+          pickupWindow: 'Manhã (10h - 12h)'
+        }
+      ];
+    }
+
+    let pedidos = carregarPedidosArmazenados();
+    let produtos = PRODUTOS_PADRAO;
+    let abaAtiva = 'dashboard';
+    let termoBusca = '';
+
+    const COLUNAS_KANBAN = [
+      { id: 'Aguardando Sinal', label: '1. Aguardando Sinal (50%)', dot: 'bg-amber-500', badgeClass: 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30' },
+      { id: 'Em Produção', label: '2. Em Produção (Bancada)', dot: 'bg-indigo-500', badgeClass: 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-400 border border-indigo-500/30' },
+      { id: 'Pronto p/ Retirar', label: '3. Pronto p/ Retirar', dot: 'bg-teal-500', badgeClass: 'bg-teal-500/15 text-teal-700 dark:text-teal-400 border border-teal-500/30' },
+      { id: 'Concluído', label: '4. Concluído & Entregue', dot: 'bg-emerald-500', badgeClass: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30' }
     ];
 
     function formatarMoeda(val) {
-      return `R$ ${val.toFixed(2).replace('.', ',')}`;
+      return `R$ ${Number(val || 0).toFixed(2).replace('.', ',')}`;
     }
 
+    // ----------------------------------------------------
+    // MODO ESCURO / MODO CLARO INTEGRADO
+    // ----------------------------------------------------
+    function alternarTemaGeral() {
+      const atual = document.documentElement.dataset.theme;
+      const novo = atual === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = novo;
+      localStorage.setItem('doce_encomenda_tema', novo);
+      atualizarIconeTema(novo);
+    }
+
+    function atualizarIconeTema(tema) {
+      const icon = document.getElementById('iconTema');
+      if (icon) {
+        icon.setAttribute('data-lucide', tema === 'dark' ? 'sun' : 'moon');
+        lucide.createIcons();
+      }
+    }
+
+    // ----------------------------------------------------
+    // TOGGLE SIDEBAR (MOSTRAR / OCULTAR)
+    // ----------------------------------------------------
+    let sidebarAberta = true;
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebarAdmin');
+      if (!sidebar) return;
+
+      sidebarAberta = !sidebarAberta;
+      if (sidebarAberta) {
+        sidebar.classList.remove('-ml-64');
+      } else {
+        sidebar.classList.add('-ml-64');
+      }
+    }
+
+    // ----------------------------------------------------
+    // NAVEGAÇÃO DE ABAS COM CORRESPONDÊNCIA COMPLETA
+    // ----------------------------------------------------
+    function navegarPara(idAba) {
+      abaAtiva = idAba;
+
+      // Atualiza estilo dos botões da sidebar
+      document.querySelectorAll('.tab-nav-btn').forEach(btn => {
+        const ehEsta = btn.dataset.tab === idAba;
+        if (ehEsta) {
+          btn.className = 'tab-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all bg-brand-primary text-white shadow-sm';
+        } else {
+          btn.className = 'tab-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-brand-muted hover:text-brand-text hover:bg-brand-surfaceSubtle transition-all';
+        }
+      });
+
+      // Alterna exibição das telas correspondentes
+      document.querySelectorAll('.tab-view').forEach(view => {
+        view.classList.add('hidden');
+      });
+
+      const viewAlvo = document.getElementById(`view-${idAba}`);
+      if (viewAlvo) {
+        viewAlvo.classList.remove('hidden');
+      }
+
+      // Renderiza o conteúdo específico da aba selecionada
+      if (idAba === 'dashboard') {
+        renderizarKPIs();
+        renderizarKanban();
+      } else if (idAba === 'catalog') {
+        renderizarTabelaCatalogo();
+      } else if (idAba === 'schedule') {
+        renderizarAgenda();
+      } else if (idAba === 'clients') {
+        renderizarClientesVIP();
+      } else if (idAba === 'analytics') {
+        renderizarFinanceiro();
+      }
+
+      lucide.createIcons();
+    }
+
+    // ----------------------------------------------------
+    // RENDERIZADOR: 1. PAINEL GERAL & KANBAN LATERAL
+    // ----------------------------------------------------
     function renderizarKPIs() {
-      const totalReceita = pedidos.reduce((a, b) => a + b.totalAmount, 0);
-      const totalSinais = pedidos.filter(p => p.status !== 'Aguardando Sinal').reduce((a, b) => a + b.depositAmount, 0);
+      const totalFaturamento = pedidos.reduce((acc, p) => acc + p.totalAmount, 0);
+      const totalSinais = pedidos.filter(p => p.status !== 'Aguardando Sinal').reduce((acc, p) => acc + p.depositAmount, 0);
       const emProducao = pedidos.filter(p => p.status === 'Em Produção').length;
       const prontos = pedidos.filter(p => p.status === 'Pronto p/ Retirar').length;
 
       const container = document.getElementById('kpiContainer');
       container.innerHTML = `
-        <div class="p-6 bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+        <div class="brand-card p-5 rounded-2xl flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold text-slate-500 tracking-wide uppercase">Faturamento Previsto</span>
-              <div class="w-9 h-9 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-brand-muted">Faturamento Previsto</span>
+              <div class="w-8 h-8 rounded-lg bg-brand-surfaceSubtle border border-brand-border flex items-center justify-center text-brand-primary">
                 <i data-lucide="dollar-sign" class="w-4 h-4"></i>
               </div>
             </div>
-            <h3 class="text-2xl font-bold text-slate-900 tracking-tight">${formatarMoeda(totalReceita)}</h3>
+            <h3 class="text-2xl font-serif font-black text-brand-text tracking-tight">${formatarMoeda(totalFaturamento)}</h3>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span class="text-slate-500 text-[11px]">Soma dos pedidos ativos</span>
-            <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-              <i data-lucide="arrow-up-right" class="w-3 h-3"></i> +12.4%
-            </span>
+          <div class="mt-3 pt-2.5 border-t border-brand-border/60 flex items-center justify-between text-[11px] text-brand-muted">
+            <span>Total de encomendas</span>
+            <span class="font-bold text-emerald-600 dark:text-emerald-400">${pedidos.length} pedidos</span>
           </div>
         </div>
 
-        <div class="p-6 bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+        <div class="brand-card p-5 rounded-2xl flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold text-slate-500 tracking-wide uppercase">Sinais Confirmados (PIX)</span>
-              <div class="w-9 h-9 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700">
-                <i data-lucide="trending-up" class="w-4 h-4"></i>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-brand-muted">Sinais em Caixa (50%)</span>
+              <div class="w-8 h-8 rounded-lg bg-brand-surfaceSubtle border border-brand-border flex items-center justify-center text-emerald-600">
+                <i data-lucide="wallet" class="w-4 h-4"></i>
               </div>
             </div>
-            <h3 class="text-2xl font-bold text-slate-900 tracking-tight">${formatarMoeda(totalSinais)}</h3>
+            <h3 class="text-2xl font-serif font-black text-emerald-600 dark:text-emerald-400 tracking-tight">${formatarMoeda(totalSinais)}</h3>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span class="text-slate-500 text-[11px]">50% antecipado em caixa</span>
-            <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-              <i data-lucide="arrow-up-right" class="w-3 h-3"></i> +8.1%
-            </span>
+          <div class="mt-3 pt-2.5 border-t border-brand-border/60 flex items-center justify-between text-[11px] text-brand-muted">
+            <span>PIX confirmado</span>
+            <span class="font-bold text-emerald-600 dark:text-emerald-400">Garantido</span>
           </div>
         </div>
 
-        <div class="p-6 bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+        <div class="brand-card p-5 rounded-2xl flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold text-slate-500 tracking-wide uppercase">Esteira em Produção</span>
-              <div class="w-9 h-9 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700">
-                <i data-lucide="clock" class="w-4 h-4"></i>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-brand-muted">Na Esteira de Produção</span>
+              <div class="w-8 h-8 rounded-lg bg-brand-surfaceSubtle border border-brand-border flex items-center justify-center text-indigo-600">
+                <i data-lucide="chef-hat" class="w-4 h-4"></i>
               </div>
             </div>
-            <div class="flex items-baseline gap-2">
-              <h3 class="text-2xl font-bold text-slate-900 tracking-tight">${emProducao}</h3>
-              <span class="text-[10px] font-bold text-slate-500 uppercase px-1.5 py-0.5 rounded bg-slate-100">Tempo Real</span>
-            </div>
+            <h3 class="text-2xl font-serif font-black text-brand-text tracking-tight">${emProducao}</h3>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span class="text-slate-500 text-[11px]">Bolos & doces na bancada</span>
+          <div class="mt-3 pt-2.5 border-t border-brand-border/60 flex items-center justify-between text-[11px] text-brand-muted">
+            <span>Bancada ativa</span>
+            <span class="font-bold text-indigo-600 dark:text-indigo-400">Em preparo</span>
           </div>
         </div>
 
-        <div class="p-6 bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+        <div class="brand-card p-5 rounded-2xl flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-semibold text-slate-500 tracking-wide uppercase">Prontos para Retirada</span>
-              <div class="w-9 h-9 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-brand-muted">Prontos p/ Retirada</span>
+              <div class="w-8 h-8 rounded-lg bg-brand-surfaceSubtle border border-brand-border flex items-center justify-center text-teal-600">
                 <i data-lucide="check-circle-2" class="w-4 h-4"></i>
               </div>
             </div>
-            <div class="flex items-baseline gap-2">
-              <h3 class="text-2xl font-bold text-slate-900 tracking-tight">${prontos}</h3>
-              <span class="text-[10px] font-bold text-slate-500 uppercase px-1.5 py-0.5 rounded bg-slate-100">Hoje</span>
-            </div>
+            <h3 class="text-2xl font-serif font-black text-brand-primary tracking-tight">${prontos}</h3>
           </div>
-          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span class="text-slate-500 text-[11px]">Aguardando comparecimento</span>
+          <div class="mt-3 pt-2.5 border-t border-brand-border/60 flex items-center justify-between text-[11px] text-brand-muted">
+            <span>Embalados com fita</span>
+            <span class="font-bold text-brand-primary">Prontos</span>
           </div>
         </div>
       `;
@@ -362,79 +770,92 @@
     function renderizarKanban() {
       const container = document.getElementById('kanbanContainer');
       const pedidosFiltrados = pedidos.filter(p => {
-        const termo = busca.toLowerCase();
+        const termo = termoBusca.toLowerCase();
         return p.clientName.toLowerCase().includes(termo) ||
                p.id.toLowerCase().includes(termo) ||
                p.items.some(i => i.name.toLowerCase().includes(termo));
       });
 
-      container.innerHTML = COLUNAS.map(col => {
+      container.innerHTML = COLUNAS_KANBAN.map(col => {
         const pedidosColuna = pedidosFiltrados.filter(p => p.status === col.id);
 
         return `
-          <div class="flex flex-col gap-3">
-            <div class="flex items-center justify-between px-3 py-2 bg-white rounded-xl border border-slate-200/80 shadow-sm">
+          <div class="flex flex-col gap-3 min-w-[280px]">
+            <!-- Topo da Coluna Lateral -->
+            <div class="flex items-center justify-between px-3.5 py-2.5 rounded-xl brand-card">
               <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full ${col.dot}"></span>
-                <h4 class="text-xs font-bold text-slate-800">${col.label}</h4>
+                <span class="w-2.5 h-2.5 rounded-full ${col.dot}"></span>
+                <h4 class="text-xs font-bold text-brand-text truncate">${col.label}</h4>
               </div>
-              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full border ${col.corBadge}">
+              <span class="text-[11px] font-black px-2 py-0.5 rounded-full ${col.badgeClass}">
                 ${pedidosColuna.length}
               </span>
             </div>
 
-            <div class="space-y-3 min-h-[420px] p-2 bg-slate-100/50 rounded-2xl border border-slate-200/50">
+            <!-- Corpo de Cards com Fluxo Lateral -->
+            <div class="space-y-3 p-2 rounded-2xl bg-brand-surfaceSubtle/50 border border-brand-border/60 min-h-[460px] flex-1">
               ${pedidosColuna.length === 0 ? `
                 <div class="h-48 flex flex-col items-center justify-center text-center p-4">
-                  <span class="text-xs font-medium text-slate-400">Nenhum pedido nesta fase</span>
+                  <i data-lucide="inbox" class="w-6 h-6 text-brand-muted/40 mb-1"></i>
+                  <span class="text-xs font-semibold text-brand-muted/60">Nenhum pedido nesta fase</span>
                 </div>
               ` : pedidosColuna.map(order => `
-                <div class="p-4 bg-white rounded-xl border border-slate-200/80 shadow-sm hover:shadow transition-shadow flex flex-col justify-between gap-3">
+                <div class="brand-card p-4 rounded-xl flex flex-col justify-between gap-3 hover:border-brand-primary/40 transition-all">
                   <div>
-                    <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-                      <span class="font-mono text-[11px] font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded">${order.id}</span>
-                      <div class="flex items-center gap-1 text-[11px]">
-                        <i data-lucide="clock" class="w-3 h-3 text-slate-400"></i>
+                    <!-- Meta topo -->
+                    <div class="flex items-center justify-between text-xs mb-2">
+                      <span class="font-mono text-[10px] font-black text-brand-primary bg-brand-surfaceSubtle border border-brand-border px-2 py-0.5 rounded">
+                        ${order.id}
+                      </span>
+                      <div class="flex items-center gap-1 text-[11px] text-brand-muted font-bold">
+                        <i data-lucide="clock" class="w-3 h-3 text-brand-primary"></i>
                         <span>${order.pickupWindow.split(' ')[0]}</span>
                       </div>
                     </div>
 
-                    <h5 class="text-xs font-bold text-slate-900">${order.clientName}</h5>
-                    <div class="flex items-center gap-1.5 text-[11px] text-slate-500 mt-1">
-                      <i data-lucide="phone" class="w-3 h-3 text-slate-400"></i>
+                    <!-- Cliente -->
+                    <h5 class="text-xs font-serif font-bold text-brand-text">${order.clientName}</h5>
+                    <div class="flex items-center gap-1.5 text-[11px] text-brand-muted mt-0.5">
+                      <i data-lucide="phone" class="w-3 h-3 text-brand-muted"></i>
                       <span>${order.clientPhone}</span>
                     </div>
 
-                    <div class="mt-3 pt-2.5 border-t border-slate-100 space-y-1">
+                    <!-- Itens -->
+                    <div class="mt-2.5 pt-2 border-t border-brand-border/60 space-y-1">
                       ${order.items.map(it => `
                         <div class="flex justify-between text-[11px]">
-                          <span class="text-slate-600 font-medium truncate max-w-[170px]">${it.quantity}x ${it.name}</span>
-                          <span class="text-slate-900 font-semibold font-mono">${formatarMoeda(it.price * it.quantity)}</span>
+                          <span class="text-brand-text font-medium truncate max-w-[170px]">&bull; ${it.quantity}x ${it.name}</span>
+                          <span class="text-brand-primary font-bold font-mono">${formatarMoeda(it.price * it.quantity)}</span>
                         </div>
                       `).join('')}
                     </div>
                   </div>
 
-                  <div class="pt-2 border-t border-slate-100">
-                    <div class="flex justify-between items-center text-[11px] mb-1.5">
-                      <span class="text-slate-500">Sinal 50%:</span>
-                      <span class="font-bold text-emerald-700">${formatarMoeda(order.depositAmount)}</span>
+                  <!-- Rodapé Financeiro do Card -->
+                  <div class="pt-2 border-t border-brand-border/60">
+                    <div class="flex justify-between items-center text-[11px] mb-1">
+                      <span class="text-brand-muted">Sinal 50% (PIX):</span>
+                      <span class="font-bold text-emerald-600 dark:text-emerald-400 font-serif">${formatarMoeda(order.depositAmount)}</span>
                     </div>
-                    <div class="flex justify-between items-center text-[11px] mb-3">
-                      <span class="text-slate-500">Restante na entrega:</span>
-                      <span class="font-bold text-slate-800">${formatarMoeda(order.remainingAmount)}</span>
+                    <div class="flex justify-between items-center text-[11px] mb-2.5">
+                      <span class="text-brand-muted">Saldo na retirada:</span>
+                      <span class="font-black text-brand-text font-serif">${formatarMoeda(order.remainingAmount)}</span>
                     </div>
 
                     ${col.id !== 'Concluído' ? `
                       <button
                         type="button"
-                        onclick="avancarStatus('${order.id}')"
-                        class="w-full py-2 px-3 rounded-lg bg-slate-50 hover:bg-slate-900 hover:text-white border border-slate-200 text-slate-700 text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                        onclick="avancarStatusPedido('${order.id}')"
+                        class="w-full py-2 px-3 rounded-lg bg-brand-surfaceSubtle hover:bg-brand-primary hover:text-white border border-brand-border text-brand-primary text-[11px] font-bold flex items-center justify-center gap-1.5 transition-colors"
                       >
                         <span>Avançar Fase</span>
                         <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
                       </button>
-                    ` : ''}
+                    ` : `
+                      <div class="py-1.5 text-center text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+                        Pedido Finalizado
+                      </div>
+                    `}
                   </div>
                 </div>
               `).join('')}
@@ -443,57 +864,330 @@
         `;
       }).join('');
 
-      document.getElementById('badgeContadorSidebar').innerText = pedidos.length;
+      document.getElementById('badgeAgendaSidebar').innerText = pedidos.length;
       lucide.createIcons();
     }
 
-    function avancarStatus(orderId) {
+    function avancarStatusPedido(id) {
       const pipeline = ['Aguardando Sinal', 'Em Produção', 'Pronto p/ Retirar', 'Concluído'];
-      const pedido = pedidos.find(p => p.id === orderId);
+      const pedido = pedidos.find(p => p.id === id);
       if (pedido) {
         const idx = pipeline.indexOf(pedido.status);
         if (idx < pipeline.length - 1) {
           pedido.status = pipeline[idx + 1];
+          salvarPedidos();
           renderizarKPIs();
           renderizarKanban();
         }
       }
     }
 
-    function adicionarNovoPedido() {
-      const novoId = `#DOCE-${Math.floor(1000 + Math.random() * 9000)}`;
-      pedidos.unshift({
-        id: novoId,
-        clientName: 'Cliente Balcão VIP',
-        clientPhone: '(11) 98888-2233',
-        items: [{ name: 'Bolo Clássico Ninho c/ Morangos (1.5kg)', quantity: 1, price: 120.00 }],
-        totalAmount: 120.00,
-        depositAmount: 60.00,
-        remainingAmount: 60.00,
-        status: 'Aguardando Sinal',
-        pickupDate: '2026-11-10',
-        pickupWindow: 'Tarde (14h - 16h30)'
+    function salvarPedidos() {
+      try {
+        localStorage.setItem('doce_encomenda_pedidos', JSON.stringify(pedidos));
+      } catch (e) {}
+    }
+
+    // ----------------------------------------------------
+    // RENDERIZADOR: 2. CARDÁPIO & RECEITAS
+    // ----------------------------------------------------
+    function renderizarTabelaCatalogo() {
+      const corpo = document.getElementById('tabelaCatalogoCorpo');
+      if (!corpo) return;
+
+      corpo.innerHTML = produtos.map(prod => `
+        <tr class="hover:bg-brand-surfaceSubtle/50 transition-colors">
+          <td class="p-4">
+            <span class="font-bold text-brand-text block">${prod.nome}</span>
+            <span class="text-[10px] text-brand-muted font-mono">ID: ${prod.id}</span>
+          </td>
+          <td class="p-4 capitalize">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-surfaceSubtle border border-brand-border text-brand-primary">
+              ${prod.categoria}
+            </span>
+          </td>
+          <td class="p-4 font-serif font-black text-brand-primary text-sm">
+            ${formatarMoeda(prod.preco)}
+          </td>
+          <td class="p-4 text-brand-muted">
+            ${prod.rendimento}
+          </td>
+          <td class="p-4 text-[11px] text-brand-text max-w-xs truncate">
+            ${prod.receita}
+          </td>
+          <td class="p-4 text-right">
+            <button onclick="alert('Editar ficha técnica de: ${prod.nome}')" class="p-1.5 rounded-lg border border-brand-border text-brand-muted hover:text-brand-text hover:bg-brand-surface">
+              <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    function abrirModalNovoProduto() {
+      alert("Para cadastrar novos produtos e receitas com cálculo de insumos JIT, você também pode utilizar o catálogo no menu de fichas técnicas!");
+    }
+
+    // ----------------------------------------------------
+    // RENDERIZADOR: 3. AGENDA DE RETIRADAS
+    // ----------------------------------------------------
+    function renderizarAgenda() {
+      const container = document.getElementById('gradeAgendaJanelas');
+      if (!container) return;
+
+      const janelas = [
+        { titulo: 'Manhã (10h às 12h)', key: 'Manhã', icone: 'sun' },
+        { titulo: 'Tarde (14h às 16h30)', key: 'Tarde', icone: 'coffee' },
+        { titulo: 'Fim de Tarde (17h às 19h)', key: 'Fim de Tarde', icone: 'sunset' }
+      ];
+
+      container.innerHTML = janelas.map(jan => {
+        const pedidosJanela = pedidos.filter(p => p.pickupWindow.includes(jan.key));
+
+        return `
+          <div class="brand-card p-5 rounded-2xl space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-brand-border/60">
+              <div class="flex items-center gap-2">
+                <i data-lucide="${jan.icone}" class="w-4 h-4 text-brand-primary"></i>
+                <h3 class="font-bold text-xs text-brand-text">${jan.titulo}</h3>
+              </div>
+              <span class="text-xs font-black px-2 py-0.5 rounded-full bg-brand-surfaceSubtle border border-brand-border text-brand-primary font-mono">
+                ${pedidosJanela.length}
+              </span>
+            </div>
+
+            <div class="space-y-2.5">
+              ${pedidosJanela.length === 0 ? `
+                <p class="text-center py-8 text-brand-muted text-xs">Nenhuma retirada programada</p>
+              ` : pedidosJanela.map(p => `
+                <div class="p-3 rounded-xl bg-brand-surfaceSubtle border border-brand-border/60 flex items-center justify-between text-xs">
+                  <div>
+                    <strong class="block text-brand-text">${p.clientName}</strong>
+                    <span class="text-[10px] text-brand-muted">${p.items.map(i => `${i.quantity}x ${i.name}`).join(', ')}</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-[10px] font-bold text-brand-primary font-mono">${p.id}</span>
+                    <span class="block text-[11px] font-bold text-emerald-600">${p.status}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function filtrarAgendaPorData(e) {
+      renderizarAgenda();
+    }
+
+    // ----------------------------------------------------
+    // RENDERIZADOR: 4. CLIENTES VIP
+    // ----------------------------------------------------
+    function renderizarClientesVIP() {
+      const container = document.getElementById('cardsClientesVIP');
+      if (!container) return;
+
+      // Agrupa clientes com base no histórico de pedidos
+      const mapaClientes = {};
+      pedidos.forEach(p => {
+        if (!mapaClientes[p.clientName]) {
+          mapaClientes[p.clientName] = {
+            nome: p.clientName,
+            whats: p.clientPhone,
+            totalGasto: 0,
+            qtdPedidos: 0,
+            ultimoPedido: p.id
+          };
+        }
+        mapaClientes[p.clientName].totalGasto += p.totalAmount;
+        mapaClientes[p.clientName].qtdPedidos += 1;
       });
-      renderizarKPIs();
-      renderizarKanban();
+
+      const lista = Object.values(mapaClientes);
+
+      container.innerHTML = lista.map(c => `
+        <div class="brand-card p-5 rounded-2xl flex flex-col justify-between gap-4">
+          <div class="flex items-start justify-between">
+            <div>
+              <h3 class="font-bold text-sm text-brand-text">${c.nome}</h3>
+              <span class="text-xs text-brand-muted flex items-center gap-1 mt-0.5">
+                <i data-lucide="phone" class="w-3 h-3 text-brand-primary"></i> ${c.whats}
+              </span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-brand-primary/10 text-brand-primary border border-brand-primary/20">
+              VIP
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 p-3 bg-brand-surfaceSubtle rounded-xl border border-brand-border/60 text-xs">
+            <div>
+              <span class="text-[10px] text-brand-muted uppercase tracking-wider block">Total Encomendado</span>
+              <strong class="font-serif font-black text-brand-primary text-sm">${formatarMoeda(c.totalGasto)}</strong>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] text-brand-muted uppercase tracking-wider block">Histórico</span>
+              <strong class="font-bold text-brand-text text-sm">${c.qtdPedidos} pedidos</strong>
+            </div>
+          </div>
+
+          <a
+            href="https://api.whatsapp.com/send?phone=55${c.whats.replace(/\\D/g, '')}&text=Olá%20${encodeURIComponent(c.nome)}!%20Aqui%20é%20da%20Netinha%20Gourmet!"
+            target="_blank"
+            class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-colors"
+          >
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+            <span>Conversar no WhatsApp</span>
+          </a>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    // ----------------------------------------------------
+    // RENDERIZADOR: 5. RELATÓRIOS FINANCEIROS & CAIXA
+    // ----------------------------------------------------
+    function renderizarFinanceiro() {
+      const containerMetricas = document.getElementById('metricasFinanceirasContainer');
+      const containerTabela = document.getElementById('tabelaFinanceiraCorpo');
+      if (!containerMetricas || !containerTabela) return;
+
+      const totalVendido = pedidos.reduce((a, b) => a + b.totalAmount, 0);
+      const totalSinaisRecebidos = pedidos.filter(p => p.status !== 'Aguardando Sinal').reduce((a, b) => a + b.depositAmount, 0);
+      const totalSaldosPendentes = pedidos.filter(p => p.status !== 'Concluído').reduce((a, b) => a + b.remainingAmount, 0);
+
+      containerMetricas.innerHTML = `
+        <div class="brand-card p-5 rounded-2xl">
+          <span class="text-[10px] font-bold text-brand-muted uppercase tracking-wider">Faturamento Bruto</span>
+          <p class="text-2xl font-serif font-black text-brand-text mt-1">${formatarMoeda(totalVendido)}</p>
+          <span class="text-[11px] text-brand-muted mt-2 block">Soma de todas as encomendas</span>
+        </div>
+
+        <div class="brand-card p-5 rounded-2xl">
+          <span class="text-[10px] font-bold text-brand-muted uppercase tracking-wider">Sinais Garantidos (50%)</span>
+          <p class="text-2xl font-serif font-black text-emerald-600 dark:text-emerald-400 mt-1">${formatarMoeda(totalSinaisRecebidos)}</p>
+          <span class="text-[11px] text-brand-muted mt-2 block">Em conta corrente (PIX)</span>
+        </div>
+
+        <div class="brand-card p-5 rounded-2xl">
+          <span class="text-[10px] font-bold text-brand-muted uppercase tracking-wider">A Receber na Retirada</span>
+          <p class="text-2xl font-serif font-black text-brand-primary mt-1">${formatarMoeda(totalSaldosPendentes)}</p>
+          <span class="text-[11px] text-brand-muted mt-2 block">Pagamento no ato da entrega</span>
+        </div>
+      `;
+
+      containerTabela.innerHTML = pedidos.map(p => `
+        <tr class="hover:bg-brand-surfaceSubtle/50 transition-colors">
+          <td class="p-3 font-mono font-bold text-brand-primary">${p.id}</td>
+          <td class="p-3 font-bold text-brand-text">${p.clientName}</td>
+          <td class="p-3 font-serif font-bold text-brand-text">${formatarMoeda(p.totalAmount)}</td>
+          <td class="p-3 font-serif font-bold text-emerald-600">${formatarMoeda(p.depositAmount)}</td>
+          <td class="p-3 font-serif font-bold text-brand-primary">${formatarMoeda(p.remainingAmount)}</td>
+          <td class="p-3 font-bold">
+            <span class="px-2 py-0.5 rounded-full text-[10px] ${p.status === 'Concluído' ? 'bg-emerald-500/15 text-emerald-600' : 'bg-amber-500/15 text-amber-600'}">
+              ${p.status}
+            </span>
+          </td>
+        </tr>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    // ----------------------------------------------------
+    // NOVO PEDIDO MANUAL
+    // ----------------------------------------------------
+    function abrirModalNovoPedido() {
+      const select = document.getElementById('formProdutoSelect');
+      if (select) {
+        select.innerHTML = produtos.map(p => `
+          <option value="${p.id}">${p.nome} - ${formatarMoeda(p.preco)}</option>
+        `).join('');
+      }
+
+      const hoje = new Date().toISOString().split('T')[0];
+      const campoData = document.getElementById('formDataRetirada');
+      if (campoData) {
+        campoData.min = hoje;
+        campoData.value = hoje;
+      }
+
+      document.getElementById('modalNovoPedido').classList.remove('hidden');
+      document.getElementById('modalNovoPedido').classList.add('flex');
+    }
+
+    function fecharModalNovoPedido() {
+      document.getElementById('modalNovoPedido').classList.add('hidden');
+      document.getElementById('modalNovoPedido').classList.remove('flex');
+    }
+
+    function salvarNovoPedidoManual(e) {
+      e.preventDefault();
+
+      const nome = document.getElementById('formClienteNome').value.trim();
+      const whats = document.getElementById('formClienteWhats').value.trim();
+      const prodId = document.getElementById('formProdutoSelect').value;
+      const data = document.getElementById('formDataRetirada').value;
+      const janela = document.getElementById('formJanelaHorario').value;
+
+      const produto = produtos.find(p => p.id === prodId) || produtos[0];
+      const total = produto.preco;
+      const sinal = total / 2;
+
+      const novo = {
+        id: `#DOCE-${Math.floor(1000 + Math.random() * 9000)}`,
+        clientName: nome,
+        clientPhone: whats,
+        items: [{ name: produto.nome, quantity: 1, price: produto.preco }],
+        totalAmount: total,
+        depositAmount: sinal,
+        remainingAmount: sinal,
+        status: 'Aguardando Sinal',
+        pickupDate: data,
+        pickupWindow: janela
+      };
+
+      pedidos.unshift(novo);
+      salvarPedidos();
+      fecharModalNovoPedido();
+      navegarPara('dashboard');
     }
 
     function aoDigitarBusca(e) {
-      busca = e.target.value;
+      termoBusca = e.target.value;
       renderizarKanban();
     }
 
-    function exportarRelatorio() {
-      alert(`Relatório gerado com sucesso!\nTotal de pedidos: ${pedidos.length}\nFaturamento Total: ${formatarMoeda(pedidos.reduce((a,b)=>a+b.totalAmount,0))}`);
-    }
+    // Inicialização da Tela
+    const hojeObj = new Date();
+    const formatador = new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' });
+    const txtHoje = formatador.format(hojeObj);
+    document.getElementById('labelDataHoje').innerText = txtHoje.charAt(0).toUpperCase() + txtHoje.slice(1);
 
-    // Inicialização
-    const formatadorData = new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' });
-    const dataTxt = formatadorData.format(new Date());
-    document.getElementById('labelDataHoje').innerText = dataTxt.charAt(0).toUpperCase() + dataTxt.slice(1);
+    atualizarIconeTema(document.documentElement.dataset.theme);
+    navegarPara('dashboard');
 
-    renderizarKPIs();
-    renderizarKanban();
+    // Sincronização em tempo real se o cliente fizer um pedido em outra aba
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'doce_encomenda_pedidos') {
+        pedidos = carregarPedidosArmazenados();
+        if (abaAtiva === 'dashboard') {
+          renderizarKPIs();
+          renderizarKanban();
+        } else if (abaAtiva === 'schedule') {
+          renderizarAgenda();
+        } else if (abaAtiva === 'clients') {
+          renderizarClientesVIP();
+        } else if (abaAtiva === 'analytics') {
+          renderizarFinanceiro();
+        }
+      }
+    });
   </script>
 </body>
 </html>
