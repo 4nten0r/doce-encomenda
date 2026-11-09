@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Netinha Gourmet | Doce Encomenda</title>
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <!-- Aplica o tema salvo antes da primeira pintura (padrão: light artesanal Netinha Gourmet) -->
+  <script>
+    const temaSalvo = localStorage.getItem('doce_encomenda_tema') === 'dark' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = temaSalvo;
+    document.documentElement.classList.toggle('dark', temaSalvo === 'dark');
+  </script>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Tipografia Netinha Gourmet: Playfair Display (serifada nobre) + Plus Jakarta Sans (sans-serif legível) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg: 'var(--color-background)',
+              surface: 'var(--color-surface)',
+              surfaceSubtle: 'var(--color-surface-subtle)',
+              primary: 'var(--color-primary)',
+              primaryHover: 'var(--color-primary-hover)',
+              text: 'var(--color-text)',
+              muted: 'var(--color-muted)',
+              border: 'var(--color-border)',
+              highlight: 'var(--color-highlight)',
+              highlightText: 'var(--color-highlight-text)',
+              terracotta: '#C84328',
+              cream: '#FFF7F1',
+              cocoa: '#452416',
+              sand: '#EBD5C4',
+              warmGray: '#9A6E5D',
+              success: '#16A34A',
+              successBg: 'var(--color-success-bg)',
+              infoBg: 'var(--color-info-bg)',
+              infoText: 'var(--color-info-text)'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+          },
+          boxShadow: {
+            'warm-sm': '0 2px 8px -2px rgba(69, 36, 22, 0.08)',
+            'warm': '0 8px 24px -4px rgba(69, 36, 22, 0.1)',
+            'warm-lg': '0 16px 36px -6px rgba(69, 36, 22, 0.14)',
+            'glow-primary': '0 4px 20px -2px rgba(200, 67, 40, 0.35)',
+            'ticket': '0 18px 40px -10px rgba(69, 36, 22, 0.16)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* TOKENS DESIGN SYSTEM NETINHA GOURMET */
+    :root {
+      color-scheme: light;
+      --color-background: #FFF7F1;
+      --color-surface: #FFFFFF;
+      --color-surface-subtle: #FDF4ED;
+      --color-surface-elevated: #FFFFFF;
+      --color-primary: #C84328;
+      --color-primary-hover: #AE351F;
+      --color-primary-active: #962B17;
+      --color-text: #452416;
+      --color-muted: #9A6E5D;
+      --color-border: #EBD5C4;
+      --color-border-hover: #D8B79F;
+      --color-highlight: #FFF2C5;
+      --color-highlight-text: #854D0E;
+      --color-success: #16A34A;
+      --color-success-bg: #DCFCE7;
+      --color-info-bg: #DBEAFE;
+      --color-info-text: #1D4ED8;
+      --clay-shadow: 7px 7px 18px rgba(116, 72, 49, 0.12), -7px -7px 18px rgba(255, 255, 255, 0.88);
+
+      --app-bg: var(--color-background);
+      --app-ink: var(--color-text);
+      --app-muted: var(--color-muted);
+      --app-panel: var(--color-surface);
+      --app-panel-solid: var(--color-surface);
+      --app-line: var(--color-border);
+      --app-shadow: 0 10px 30px -5px rgba(69, 36, 22, 0.08);
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --color-background: #18100C;
+      --color-surface: #241712;
+      --color-surface-subtle: #2F1E18;
+      --color-surface-elevated: #3A261E;
+      --color-primary: #E25A3C;
+      --color-primary-hover: #F06E52;
+      --color-primary-active: #C84328;
+      --color-text: #FFF5EE;
+      --color-muted: #D3B7A8;
+      --color-border: #4D3328;
+      --color-border-hover: #6E493A;
+      --color-highlight: #4A3512;
+      --color-highlight-text: #FEF08A;
+      --color-success: #22C55E;
+      --color-success-bg: rgba(34, 197, 94, 0.16);
+      --color-info-bg: rgba(29, 78, 216, 0.18);
+      --color-info-text: #93C5FD;
+      --clay-shadow: 7px 7px 18px rgba(0, 0, 0, 0.34), -7px -7px 18px rgba(91, 60, 45, 0.18);
+
+      --app-bg: var(--color-background);
+      --app-ink: var(--color-text);
+      --app-muted: var(--color-muted);
+      --app-panel: var(--color-surface);
+      --app-panel-solid: var(--color-surface);
+      --app-line: var(--color-border);
+      --app-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.45);
+    }
+
+    .clay-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      box-shadow: var(--clay-shadow);
+      transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .clay-btn {
+      background: var(--color-surface-subtle);
+      border: 1px solid var(--color-border);
+      box-shadow: var(--clay-shadow);
+      transition: transform 0.2s ease, background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .clay-btn:hover {
+      border-color: var(--color-primary);
+      box-shadow: 4px 4px 12px rgba(116, 72, 49, 0.12), -4px -4px 12px rgba(255, 255, 255, 0.82);
+      transform: translateY(-1px);
+    }
+
+    :root[data-theme="dark"] .clay-btn:hover {
+      box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.36), -4px -4px 12px rgba(91, 60, 45, 0.18);
+    }
+
+    .clay-badge {
+      background: var(--color-surface-subtle);
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+      box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.65), 2px 2px 6px rgba(116, 72, 49, 0.08);
+      font-size: 0.65rem;
+    }
+
+    /* NEUMORFISMO - Design System */
+    :root {
+      --neu-light: rgba(255, 255, 255, 0.7);
+      --neu-dark: rgba(116, 72, 49, 0.15);
+      --neu-shadow: 8px 8px 16px var(--neu-dark), -8px -8px 16px var(--neu-light);
+      --neu-shadow-inset: inset 4px 4px 8px var(--neu-dark), inset -4px -4px 8px var(--neu-light);
+    }
+
+    :root[data-theme="dark"] {
+      --neu-light: rgba(91, 60, 45, 0.4);
+      --neu-dark: rgba(0, 0, 0, 0.5);
+      --neu-shadow: 8px 8px 16px var(--neu-dark), -8px -8px 16px var(--neu-light);
+      --neu-shadow-inset: inset 4px 4px 8px var(--neu-dark), inset -4px -4px 8px var(--neu-light);
+    }
+
+    .neu-card {
+      background: var(--color-surface);
+      border-radius: 24px;
+      box-shadow: var(--neu-shadow);
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .neu-card:active {
+      box-shadow: var(--neu-shadow-inset);
+    }
+
+    .neu-btn {
+      background: var(--color-surface-subtle);
+      border: none;
+      border-radius: 20px;
+      box-shadow: var(--neu-shadow);
+      color: var(--color-text);
+      font-weight: 600;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      cursor: pointer;
+    }
+
+    .neu-btn:hover {
+      box-shadow: 6px 6px 12px var(--neu-dark), -6px -6px 12px var(--neu-light);
+      transform: translateY(-2px);
+    }
+
+    .neu-btn:active {
+      box-shadow: var(--neu-shadow-inset);
+      transform: translateY(0) scale(0.97);
+    }
+
+    .neu-btn.primary {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      box-shadow: 6px 6px 12px rgba(200, 67, 40, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.4);
+    }
+
+    .neu-btn.primary:hover {
+      box-shadow: 8px 8px 16px rgba(200, 67, 40, 0.4), -8px -8px 16px rgba(255, 255, 255, 0.5);
+      background: var(--color-primary-hover);
+    }
+
+    .neu-btn.primary:active {
+      box-shadow: var(--neu-shadow-inset);
+    }
+
+    .neu-input {
+      background: var(--color-surface-subtle);
+      border: none;
+      border-radius: 16px;
+      box-shadow: var(--neu-shadow-inset);
+      color: var(--color-text);
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .neu-input:focus {
+      outline: none;
+      box-shadow: inset 2px 2px 5px var(--neu-dark), inset -2px -2px 5px var(--neu-light);
+    }
+
+    .neu-toggle {
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 50%;
+      background: var(--color-surface-subtle);
+      box-shadow: var(--neu-shadow);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .neu-toggle:active {
+      box-shadow: var(--neu-shadow-inset);
+    }
+
+    /* HOME - Botões alinhados (desktop) */
+    .home-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      max-width: 280px;
+      margin-top: 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .home-actions {
+        flex-direction: row;
+        justify-content: center;
+        max-width: 560px;
+      }
+      .home-actions > * {
+        flex: 1;
+      }
+    }
+
+    body {
+      background-color: var(--color-background);
+      background-image: 
+        radial-gradient(circle at 12% 10%, rgba(200, 67, 40, 0.04) 0%, transparent 45%),
+        radial-gradient(circle at 88% 20%, rgba(235, 213, 196, 0.28) 0%, transparent 45%),
+        linear-gradient(180deg, var(--color-background) 0%, var(--color-surface-subtle) 100%);
+      background-attachment: fixed;
+      color: var(--color-text);
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+      transition: background-color 0.35s ease, color 0.35s ease;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Painéis e Cards de Confeitaria Artesanal */
+    .artisan-card, .glass-panel {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      box-shadow: var(--clay-shadow);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.35s ease;
+    }
+
+    .interactive-card {
+      transition: translate 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.28s ease, box-shadow 0.28s ease;
+    }
+
+    .interactive-control {
+      transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .interactive-card:hover {
+        translate: 0 -4px;
+        border-color: var(--color-border-hover);
+        box-shadow: 0 16px 34px -14px rgba(69, 36, 22, 0.3), var(--clay-shadow);
+      }
+
+      .interactive-control:hover {
+        transform: translateY(-2px);
+      }
+    }
+
+    #mainCard {
+      flex: 1 1 0%;
+      width: 100%;
+      max-width: none;
+      min-height: 0;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      animation: portal-enter 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+      background: var(--color-surface);
+    }
+
+    body {
+      height: 100vh;
+      height: 100svh;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    body > aside {
+      flex: 0 0 auto;
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    body > footer {
+      flex: 0 0 auto;
+      margin: 0;
+      padding: 0.65rem 1rem;
+    }
+
+    button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @keyframes portal-enter {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #listaProdutos > .artisan-card, #listaProdutos > .glass-panel {
+      animation: product-reveal 0.4s both cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #listaProdutos > *:nth-child(2) { animation-delay: 0.03s; }
+    #listaProdutos > *:nth-child(3) { animation-delay: 0.06s; }
+    #listaProdutos > *:nth-child(4) { animation-delay: 0.09s; }
+    #listaProdutos > *:nth-child(5) { animation-delay: 0.12s; }
+    #listaProdutos > *:nth-child(6) { animation-delay: 0.15s; }
+    #listaProdutos > *:nth-child(7) { animation-delay: 0.18s; }
+    #listaProdutos > *:nth-child(8) { animation-delay: 0.21s; }
+
+    @keyframes product-reveal {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .artisan-input, .glass-input {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      transition: all 0.2s ease;
+    }
+    .artisan-input:focus, .glass-input:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(200, 67, 40, 0.18);
+      outline: none;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: var(--color-muted);
+      opacity: 0.75;
+    }
+
+    /* Adaptações Mobile e Safe-area */
+    @media (max-width: 639px) {
+      body { justify-content: flex-start; }
+      #mainCard > header { padding: 1rem 1rem 0.85rem; }
+      #stepper { padding-inline: 1rem; }
+      #listaProdutos { padding: 1rem 0.9rem 8rem; }
+      #barraCarrinho { padding: 0.85rem; }
+      #identificacao, #pagamento, #comprovante { padding: 1rem; }
+      #identificacao input, #identificacao select { min-height: 2.9rem; }
+    }
+
+    /* Telas Dinâmicas */
+    .screen {
+      transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .screen.hidden-screen {
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      visibility: hidden;
+      transform: translateY(12px) scale(0.99);
+    }
+    .screen.active-screen {
+      opacity: 1;
+      pointer-events: auto;
+      position: relative;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    .theme-toggle {
+      width: 2.4rem;
+      height: 2.4rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--color-border);
+      border-radius: 0.85rem;
+      color: var(--color-primary);
+      background: var(--color-surface);
+      cursor: pointer;
+      box-shadow: var(--clay-shadow);
+      transition: transform 0.2s ease, background-color 0.25s ease, border-color 0.25s ease;
+    }
+    .theme-toggle:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-1px) rotate(8deg);
+    }
+    .theme-toggle:active { transform: scale(0.92); }
+    #themeIcon svg { width: 100%; height: 100%; }
+
+    .product-image { overflow: hidden; }
+    .product-image img { transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+    .group:hover .product-image img { transform: scale(1.05); }
+
+    /* Botões Táteis e Ações */
+    .btn-touch {
+      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+    .btn-touch:hover { transform: translateY(-1px); }
+    .btn-touch:active { transform: scale(0.97); }
+
+    .btn-terracotta, .btn-gold-gradient {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      box-shadow: 0 4px 16px -2px rgba(200, 67, 40, 0.35);
+      transition: all 0.2s ease;
+    }
+    .btn-terracotta:hover, .btn-gold-gradient:hover {
+      background: var(--color-primary-hover);
+      box-shadow: 0 6px 20px -2px rgba(200, 67, 40, 0.45);
+    }
+
+    /* Ticket Perfurado Confeitaria Artesanal */
+    .ticket-container {
+      position: relative;
+      background: var(--color-surface);
+      border: 1.5px dashed var(--color-border);
+      color: var(--color-text);
+      box-shadow: 0 16px 36px -8px rgba(69, 36, 22, 0.12);
+    }
+    .ticket-container::before, .ticket-container::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 24px;
+      height: 24px;
+      background: var(--color-background);
+      border: 1.5px solid var(--color-border);
+      border-radius: 50%;
+      z-index: 30;
+      transform: translateY(-50%);
+    }
+    .ticket-container::before { left: -13px; }
+    .ticket-container::after { right: -13px; }
+
+    #confettiCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.3); opacity: 0; }
+      100% { transform: scale(0.95); opacity: 0; }
+    }
+    .live-dot::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: var(--color-success);
+      animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    .brand-lockup {
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .brand-lockup:hover {
+        transform: scale(1.025);
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col selection:bg-brand-primary selection:text-white">
+
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- CONTAINER PRINCIPAL DO PORTAL -->
+  <main id="mainCard" class="artisan-card overflow-hidden relative flex flex-col">
+
+    <!-- CABEÇALHO ELEGANTE COM IDENTIDADE VISUAL -->
+    <header id="appHeader" class="px-5 pt-5 pb-3.5 flex items-center justify-between border-b border-brand-border bg-brand-surface/90 backdrop-blur-md z-40 transition-all">
+      <div class="flex items-center gap-2.5">
+        <button id="btnSairHeader" onclick="voltarParaHome()" class="p-2 rounded-xl bg-brand-surfaceSubtle hover:bg-brand-surface border border-brand-border text-brand-muted hover:text-brand-text text-xs font-bold transition-colors btn-touch flex items-center gap-1" title="Voltar ao início">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          <span class="text-[11px]">Início</span>
+        </button>
+
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-xl overflow-hidden bg-brand-surfaceSubtle border border-brand-border shadow-warm-sm flex items-center justify-center shrink-0">
+              <img src="logo.png" alt="Selo da Netinha Gourmet" class="w-full h-full object-cover object-left p-1">
+          </div>
+          <div>
+            <h1 class="font-serif font-bold text-brand-text text-base sm:text-lg tracking-tight leading-none">
+              Netinha Gourmet
+            </h1>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <span class="text-[9px] font-bold text-brand-primary uppercase tracking-wider">Feito com carinho</span>
+              <span class="text-brand-border text-[9px]">&bull;</span>
+              <span class="text-[9px] font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Aberto
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AÇÕES DO HEADER: TEMA + CARRINHO (alinhados) -->
+      <div class="flex items-center gap-2">
+        <button id="themeToggle" type="button" class="theme-toggle neu-toggle interactive-control" onclick="alternarTema()" aria-label="Alternar tema" title="Alternar tema">
+          <span id="themeIcon" aria-hidden="true" class="w-5 h-5">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M20.2 15.3A8.5 8.5 0 0 1 8.7 3.8 8.5 8.5 0 1 0 20.2 15.3Z"/></svg>
+          </span>
+        </button>
+        <button onclick="focarCarrinho()" class="relative p-2.5 rounded-2xl bg-brand-surfaceSubtle hover:bg-brand-surface border border-brand-border text-brand-primary transition-all btn-touch neu-btn" title="Ver Carrinho" aria-label="Ver Carrinho">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4"/></svg>
+          <span id="badgeCarrinhoTopo" class="absolute -top-1 -right-1 bg-brand-primary text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md scale-0 transition-transform">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ETAPAS DE PROGRESSO DO CHECKOUT -->
+    <nav id="stepper" class="px-6 py-2.5 bg-brand-surfaceSubtle/60 border-b border-brand-border flex items-center justify-between text-[11px] font-semibold text-brand-muted z-30">
+      <div id="step-1" class="flex items-center gap-1.5 text-brand-primary font-bold transition-colors">
+        <span class="w-5 h-5 rounded-full bg-brand-primary text-white flex items-center justify-center text-[10px] font-black shadow-warm-sm">1</span>
+        <span>Cardápio</span>
+      </div>
+      <div class="h-[1px] w-6 bg-brand-border"></div>
+      <div id="step-2" class="flex items-center gap-1.5 text-brand-muted/70 transition-colors">
+        <span class="w-5 h-5 rounded-full bg-brand-surface border border-brand-border text-brand-muted flex items-center justify-center text-[10px] font-bold">2</span>
+        <span>Retirada</span>
+      </div>
+      <div class="h-[1px] w-6 bg-brand-border"></div>
+      <div id="step-3" class="flex items-center gap-1.5 text-brand-muted/70 transition-colors">
+        <span class="w-5 h-5 rounded-full bg-brand-surface border border-brand-border text-brand-muted flex items-center justify-center text-[10px] font-bold">3</span>
+        <span>Sinal 50%</span>
+      </div>
+    </nav>
+
+    <!-- ÁREA DE TELAS DINÂMICAS -->
+    <div class="flex-1 flex flex-col relative z-20 overflow-hidden bg-brand-surface">
+
+      <!-- ============================================ -->
+      <!-- 0. SPLASH SCREEN ELEGANTE -->
+      <!-- ============================================ -->
+      <div id="splash" class="screen active-screen absolute inset-0 z-50 flex flex-col items-center justify-center bg-brand-surface text-brand-text p-6 text-center">
+        <div class="relative mb-5">
+          <div class="clay-card w-20 h-20 rounded-3xl flex items-center justify-center p-2">
+            <img src="logo.png" alt="Selo da Netinha Gourmet" class="w-full h-full object-cover object-left">
+          </div>
+        </div>
+        <h2 class="text-3xl font-serif font-bold tracking-tight text-brand-text">Netinha Gourmet</h2>
+        <p class="mt-1.5 text-xs text-brand-primary font-bold tracking-widest uppercase">Bolos, doces e balas de coco</p>
+        <p class="text-xs text-brand-muted mt-0.5">Feito com muito carinho</p>
+        <div class="mt-8 flex items-center gap-2 text-xs text-brand-muted">
+          <svg class="animate-spin h-4 w-4 text-brand-primary" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Preparando doces frescos...</span>
+        </div>
+      </div>
+
+      <!-- ============================================ -->
+      <!-- TELA INICIAL / BOAS-VINDAS (CONFORME FIGMA) -->
+      <!-- ============================================ -->
+      <div id="home" class="screen hidden-screen flex-1 p-6 flex flex-col justify-between items-center text-center">
+        <div class="w-full flex-1 flex flex-col items-center justify-center py-4">
+          <div class="w-full flex items-center justify-center mb-6">
+            <img src="logo-inicio.png" alt="Netinha Gourmet" class="brand-lockup w-full max-w-[19rem] h-auto">
+          </div>
+
+          <h2 class="font-serif font-black text-2xl sm:text-3xl text-brand-text tracking-tight leading-tight">
+            Um toque doce para celebrar
+          </h2>
+          <p class="text-[11px] text-brand-muted max-w-xs mt-2.5 leading-relaxed">
+            Bolos, doces finos e balas de coco artesanais para adoçar seus momentos especiais.
+          </p>
+
+          <div class="grid grid-cols-3 gap-2 w-full max-w-xs mt-6 pt-5 border-t border-brand-border/60 text-center">
+            <div class="interactive-card p-2 rounded-xl bg-brand-surfaceSubtle border border-brand-border/60">
+              <svg class="w-5 h-5 mx-auto text-brand-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg>
+              <span class="text-[9px] font-bold text-brand-text block mt-0.5">Ingredientes Nobres</span>
+            </div>
+            <div class="clay-badge interactive-card p-2 rounded-xl bg-brand-surfaceSubtle border border-brand-border/60">
+              <img src="logo.png" alt="Selo da Netinha Gourmet" class="w-5 h-5 sm:w-6 inline-block object-cover object-left">
+              <span class="text-[9px] font-bold text-brand-text block mt-0.5">Balas de Coco</span>
+            </div>
+            <div class="interactive-card p-2 rounded-xl bg-brand-surfaceSubtle border border-brand-border/60">
+              <svg class="w-5 h-5 mx-auto text-brand-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 13h16l-2 7H6l-2-7Zm1 0V9a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M9 7V4m6 3V4"/></svg>
+              <span class="text-[9px] font-bold text-brand-text block mt-0.5">Bolos Caseiros</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="home-actions mt-8">
+          <button onclick="iniciarEncomenda()" class="neu-btn primary w-full py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 shadow-warm-lg">
+            <span>Fazer uma Encomenda</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================================ -->
+      <!-- 1. CATÁLOGO DE PRODUTOS COM FILTROS -->
+      <!-- ============================================ -->
+      <div id="catalogo" class="screen hidden-screen flex-1 flex flex-col h-full">
+        
+        <!-- BARRA DE CATEGORIAS -->
+        <div class="px-5 pt-4 pb-2 flex gap-2 overflow-x-auto no-scrollbar border-b border-brand-border/60">
+          <button onclick="filtrarCategoria('todos')" data-cat="todos" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-brand-primary text-white shadow-sm whitespace-nowrap">
+            Todos
+          </button>
+          <button onclick="filtrarCategoria('bolos')" data-cat="bolos" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-medium text-brand-muted hover:text-brand-text bg-brand-surface border border-brand-border whitespace-nowrap transition-all">
+            Bolos
+          </button>
+          <button onclick="filtrarCategoria('doces')" data-cat="doces" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-medium text-brand-muted hover:text-brand-text bg-brand-surface border border-brand-border whitespace-nowrap transition-all">
+            Brigadeiros
+          </button>
+          <button onclick="filtrarCategoria('balas')" data-cat="balas" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-medium text-brand-muted hover:text-brand-text bg-brand-surface border border-brand-border whitespace-nowrap transition-all">
+            Balas de Coco
+          </button>
+          <button onclick="filtrarCategoria('combos')" data-cat="combos" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-medium text-brand-muted hover:text-brand-text bg-brand-surface border border-brand-border whitespace-nowrap transition-all">
+            Combos
+          </button>
+        </div>
+
+        <!-- LISTA DE PRODUTOS SCROLLÁVEL -->
+        <div class="flex-1 p-5 overflow-y-auto no-scrollbar pb-32 space-y-3.5" id="listaProdutos">
+          <!-- Gerado dinamicamente pelo app.js com cards elegantes -->
+        </div>
+
+        <!-- BARRA INFERIOR FLUTUANTE DO CARRINHO (DRAWER) -->
+        <div id="barraCarrinho" class="absolute bottom-0 inset-x-0 p-4 bg-brand-surface/95 backdrop-blur-xl border-t border-brand-border transform translate-y-full transition-all duration-300 shadow-warm-lg z-40">
+          <div class="flex items-center justify-between mb-3 px-1">
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-brand-surfaceSubtle text-brand-primary border border-brand-border flex items-center justify-center text-xs font-black" id="qtdItensBadge">0</span>
+              <span class="text-xs font-bold text-brand-text tracking-wide">Itens no Pedido</span>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] text-brand-muted uppercase tracking-wider block leading-none">Total</span>
+              <span class="text-base font-black text-brand-primary font-serif" id="totalCarrinho">R$ 0,00</span>
+            </div>
+          </div>
+          
+          <button onclick="irParaIdentificacao()" class="w-full btn-terracotta py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 btn-touch font-sans tracking-wide">
+            <span>Avançar para Retirada</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ============================================ -->
+      <!-- 2. IDENTIFICAÇÃO E DADOS DE RETIRADA -->
+      <!-- ============================================ -->
+      <div id="identificacao" class="screen hidden-screen flex-1 p-6 flex flex-col justify-between overflow-y-auto no-scrollbar">
+        <div class="space-y-4">
+          <button onclick="voltarParaCatalogo()" class="text-brand-primary hover:opacity-80 text-xs font-bold flex items-center gap-1.5 btn-touch transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Voltar ao Cardápio
+          </button>
+
+          <div>
+            <h2 class="text-xl font-serif font-bold text-brand-text">Dados de Retirada</h2>
+            <p class="text-xs text-brand-muted mt-1 leading-relaxed">
+              Produção sob encomenda com ingredientes selecionados. Informe seus dados para prepararmos seu pedido:
+            </p>
+          </div>
+
+          <div class="space-y-3.5">
+            <div>
+              <label class="block text-[11px] font-bold text-brand-text uppercase tracking-wider mb-1.5">Seu Nome Completo</label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-brand-muted">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path stroke-linecap="round" stroke-linejoin="round" d="M5 21a7 7 0 0 1 14 0"/></svg>
+                </span>
+                <input type="text" id="cliNome" placeholder="Ex: Fernanda Lima" class="w-full pl-10 pr-3.5 py-3 neu-input rounded-xl text-sm font-medium">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-brand-text uppercase tracking-wider mb-1.5">WhatsApp (p/ confirmação)</label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-brand-muted">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 3.9a8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg>
+                </span>
+                <input type="tel" id="cliWhats" placeholder="(11) 98765-4321" class="w-full pl-10 pr-3.5 py-3 neu-input rounded-xl text-sm font-medium">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-1">
+              <div>
+                <label class="block text-[11px] font-bold text-brand-text uppercase tracking-wider mb-1.5">Data da Retirada</label>
+                <input type="date" id="cliData" class="w-full p-3 neu-input rounded-xl text-xs font-semibold cursor-pointer">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-brand-text uppercase tracking-wider mb-1.5">Horário Previsto</label>
+                <select id="cliHora" class="w-full p-3 artisan-input rounded-xl text-xs font-semibold cursor-pointer">
+                  <option value="Manhã (10h - 12h)">Manhã (10h às 12h)</option>
+                  <option value="Tarde (14h - 16h30)" selected>Tarde (14h às 16h30)</option>
+                  <option value="Fim de Tarde (17h - 19h)">Fim de Tarde (17h às 19h)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-brand-muted uppercase tracking-wider mb-1.5">Observações ou Dedicatória (Opcional)</label>
+              <input type="text" id="cliObs" placeholder="Ex: Escrever 'Parabéns Sofia' na plaquinha" class="w-full px-3.5 py-2.5 neu-input rounded-xl text-xs">
+            </div>
+          </div>
+
+          <!-- Resumo Rápido da Compra -->
+          <div class="p-3.5 rounded-2xl bg-brand-surfaceSubtle border border-brand-border text-xs flex justify-between items-center">
+            <span class="text-brand-muted">Total a encomendar:</span>
+            <span class="font-black text-brand-primary text-sm font-serif" id="resumoSubtotal">R$ 0,00</span>
+          </div>
+        </div>
+
+        <button onclick="abrirModalRevisao()" class="w-full mt-6 btn-terracotta py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 btn-touch"><span>Revisar Pedido</span></button>
+      </div>
+
+      <!-- MODAL DE REVISÃO DO PEDIDO -->
+      <div id="modalRevisao" class="fixed inset-0 z-50 hidden flex items-center justify-center">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="fecharModalRevisao()"></div>
+        <div class="bg-brand-surface w-full max-w-lg mx-4 rounded-3xl border border-brand-border shadow-ticket relative flex flex-col max-h-[90vh]">
+          <div class="p-6 border-b border-brand-border/60 flex items-center justify-between">
+            <h3 class="font-serif font-bold text-xl text-brand-text">Revisar Pedido</h3>
+            <button onclick="fecharModalRevisao()" class="w-8 h-8 rounded-xl bg-brand-surfaceSubtle hover:bg-brand-surface border border-brand-border text-brand-muted flex items-center justify-center transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <div class="p-6 overflow-y-auto flex-1">
+            <div class="space-y-4">
+              <div class="flex justify-between items-center pb-2 border-b border-brand-border/40">
+                <span class="text-sm font-bold text-brand-text">Itens no Pedido</span>
+                <span id="modalQtdItens" class="text-sm text-brand-primary font-bold">0 itens</span>
+              </div>
+
+              <div id="modalItensLista" class="space-y-3 max-h-[300px] overflow-y-auto pr-2">
+                <!-- Itens preenchidos via JS -->
+              </div>
+
+              <div class="mt-4 pt-4 border-t border-brand-border/40 flex justify-between items-center">
+                <span class="text-sm font-bold text-brand-text">Total do Pedido</span>
+                <span id="modalTotal" class="text-lg font-black text-brand-primary font-serif">R$ 0,00</span>
+              </div>
+
+              <div class="mt-3 p-3 rounded-2xl bg-brand-surfaceSubtle border border-brand-border text-xs flex justify-between items-center">
+                <span class="text-brand-muted">Sinal (50%)</span>
+                <span id="modalSinal" class="font-bold text-emerald-600 font-serif">R$ 0,00</span>
+              </div>
+
+              <div class="mt-3 p-3 rounded-2xl bg-brand-surfaceSubtle border border-brand-border text-xs flex justify-between items-center">
+                <span class="text-brand-muted">Restante na Retirada</span>
+                <span id="modalRestante" class="font-bold text-brand-primary font-serif">R$ 0,00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 border-t border-brand-border/60 flex gap-3">
+            <button onclick="fecharModalRevisao()" class="flex-1 py-3 rounded-2xl bg-brand-surfaceSubtle border border-brand-border text-brand-text font-bold text-sm hover:bg-brand-surface transition-colors">
+              Corrigir Dados
+            </button>
+            <button onclick="confirmarEAvancarPagamento()" class="flex-1 py-3 rounded-2xl btn-terracotta text-white font-bold text-sm shadow-warm-lg transition-colors flex items-center justify-center gap-2">
+              <span>Garantir Encomenda</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================ -->
+      <!-- 3. PAGAMENTO DO SINAL (50%) -->
+      <!-- ============================================ -->
+      <div id="pagamento" class="screen hidden-screen flex-1 p-6 flex flex-col justify-between overflow-y-auto no-scrollbar">
+        <div class="space-y-4">
+          <button onclick="goTo('identificacao')" class="text-brand-primary hover:opacity-80 text-xs font-bold flex items-center gap-1.5 btn-touch transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Alterar Dados
+          </button>
+
+          <div>
+            <span class="text-[10px] font-extrabold uppercase tracking-widest text-brand-primary px-2.5 py-0.5 rounded-full bg-brand-surfaceSubtle border border-brand-border">Reserva de Insumos</span>
+            <h2 class="text-xl font-serif font-bold text-brand-text mt-1">Sinal de Reserva (50%)</h2>
+            <p class="text-xs text-brand-muted mt-1 leading-relaxed">
+              Como nossos doces são 100% artesanais e frescos, pedimos um sinal de 50% para garantir sua data na esteira. O restante é pago na retirada!
+            </p>
+          </div>
+
+          <!-- CARD PIX NETINHA GOURMET -->
+          <div class="artisan-card p-5 rounded-3xl border border-brand-border text-center relative overflow-hidden shadow-warm bg-brand-surface">
+            <span class="text-[10px] font-bold text-brand-muted uppercase tracking-widest block mb-1">Valor do Sinal via PIX</span>
+            <p class="text-3xl font-serif font-black text-brand-primary tracking-tight" id="valorSinal">R$ 0,00</p>
+            
+            <div class="mt-4 p-3 bg-white rounded-2xl inline-block shadow-sm mx-auto border border-brand-border">
+              <img id="pixQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=PIX_NETINHA_GOURMET&color=452416&bgcolor=ffffff" alt="QR Code PIX" class="w-32 h-32 rounded-lg">
+            </div>
+
+            <p class="text-[11px] text-brand-muted mt-2 font-medium">Escaneie o QR Code ou use o botão abaixo:</p>
+
+            <button onclick="copiarPix()" id="btnCopiarPix" class="mt-3 w-full bg-brand-surfaceSubtle hover:bg-brand-surface border border-brand-border text-brand-primary py-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 btn-touch interactive-control transition-all">
+              <span id="copyIcon" class="w-4 h-4">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path stroke-linecap="round" d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>
+              </span>
+              <span id="copyText">Copiar Chave PIX (Copia e Cola)</span>
+            </button>
+          </div>
+
+          <!-- Saldo Restante -->
+          <div class="bg-brand-surfaceSubtle p-3.5 rounded-2xl border border-brand-border flex justify-between items-center text-xs">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-brand-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path stroke-linecap="round" d="M2 10h20"/></svg>
+              <span class="text-brand-muted">Saldo restante p/ a retirada:</span>
+            </div>
+            <span class="font-extrabold text-brand-text font-serif text-sm" id="valorRestante">R$ 0,00</span>
+          </div>
+        </div>
+
+        <button onclick="simularPagamento()" id="btnConfirmarPix" class="w-full mt-5 btn-terracotta font-black py-4 rounded-2xl text-sm transition-all btn-touch shadow-warm-lg flex items-center justify-center gap-2">
+          <span>Já Realizei o Pagamento</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- ============================================ -->
+      <!-- 4. TICKET COMPROVANTE -->
+      <!-- ============================================ -->
+      <div id="comprovante" class="screen hidden-screen flex-1 p-6 flex flex-col items-center justify-between text-center overflow-y-auto no-scrollbar">
+        
+        <div class="w-full mt-2">
+          <div class="w-16 h-16 bg-emerald-500/15 border border-emerald-400/40 text-emerald-600 dark:text-emerald-400 rounded-3xl flex items-center justify-center mx-auto mb-3 text-3xl shadow-warm">
+            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m5 12 4 4L19 6"/></svg>
+          </div>
+          <span class="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 tracking-widest uppercase bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+            Pedido Registrado!
+          </span>
+          <h2 class="text-2xl font-serif font-black text-brand-text mt-2">Pedido recebido!</h2>
+          <p class="text-brand-muted text-xs mt-1">A confeiteira confirmará o sinal no WhatsApp antes de iniciar a produção.</p>
+        </div>
+        
+        <!-- TICKET COM RECORTES DE CONFEITARIA -->
+        <div class="w-full ticket-container p-6 rounded-3xl text-left my-4 shadow-ticket">
+          
+          <div class="flex items-center justify-between border-b border-brand-border pb-3">
+            <div>
+              <span class="text-[9px] uppercase font-black text-brand-primary tracking-widest">TICKET DE RETIRADA</span>
+              <p class="font-serif font-bold text-brand-text text-base mt-0.5" id="ticketNome">Ana Silva</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs font-mono font-black px-2.5 py-1 rounded-lg bg-brand-surfaceSubtle text-brand-primary border border-brand-border" id="ticketCodigo">#DOCE-0000</span>
+            </div>
+          </div>
+
+          <!-- Itens do Ticket -->
+          <div class="py-3 border-b border-brand-border/60 space-y-1 text-xs">
+            <span class="text-[10px] uppercase font-bold text-brand-muted tracking-wider block">Itens Solicitados:</span>
+            <div id="ticketItensLista" class="space-y-1 text-brand-text font-medium">
+              <!-- Preenchido via app.js -->
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-xs pt-3 mb-3">
+            <div>
+              <span class="text-brand-muted text-[10px] uppercase font-semibold block mb-0.5">Data & Horário</span>
+              <span id="ticketDataHora" class="font-bold text-brand-text text-xs">00/00 às 00:00</span>
+            </div>
+            <div class="text-right">
+              <span class="text-brand-muted text-[10px] uppercase font-semibold block mb-0.5">Sinal (50%)</span>
+              <span id="ticketSinal" class="font-black text-emerald-600 dark:text-emerald-400 text-xs">R$ 0,00</span>
+            </div>
+          </div>
+          
+          <div class="bg-brand-surfaceSubtle p-3 rounded-2xl border border-brand-border flex items-center justify-between">
+            <span class="text-[11px] text-brand-muted font-medium">Falta Pagar na Retirada:</span>
+            <span class="text-sm font-black text-brand-primary font-serif" id="ticketRestante">R$ 0,00</span>
+          </div>
+        </div>
+        
+        <!-- AÇÕES FINAIS -->
+        <div class="w-full space-y-2.5">
+          <button onclick="enviarParaWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3.5 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 btn-touch interactive-control shadow-md">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 3.9a8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg>
+            Enviar Pedido no WhatsApp da Confeiteira
+          </button>
+          
+          <button onclick="resetarApp()" class="w-full text-brand-muted hover:text-brand-text text-xs font-semibold py-2.5 transition-colors btn-touch">
+            Fazer Nova Encomenda
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- RODAPÉ DE REQUINTE -->
+  <footer class="mt-4 text-center text-xs text-brand-muted flex items-center justify-center gap-2">
+    <span>Netinha Gourmet &bull; Feito com muito carinho &bull; Bolos, doces e balas de coco</span>
+  </footer>
+
+  <script src="catalogo.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

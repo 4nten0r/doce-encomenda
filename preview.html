@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netinha Gourmet | Painel Corporativo de Confeitaria</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
+
+  <div class="flex min-h-screen bg-slate-50 font-sans">
+    
+    <!-- SIDEBAR -->
+    <aside class="w-64 min-h-screen bg-white border-r border-slate-200/80 flex flex-col justify-between shrink-0 select-none">
+      <div>
+        <!-- Brand Header -->
+        <div class="h-20 flex items-center px-6 border-b border-slate-100 gap-3">
+          <div class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-white shadow-sm font-semibold tracking-wider text-sm">
+            NG
+          </div>
+          <div class="flex flex-col">
+            <span class="font-semibold text-slate-900 text-sm tracking-tight leading-none">
+              Netinha Gourmet
+            </span>
+            <span class="text-[11px] font-medium text-slate-400 mt-1 flex items-center gap-1">
+              <i data-lucide="sparkles" class="w-3 h-3 text-amber-500"></i> Confeitaria Premium
+            </span>
+          </div>
+        </div>
+
+        <!-- Navigation Section -->
+        <div class="px-3 py-6">
+          <p class="px-3 text-[11px] font-semibold tracking-wider text-slate-400 uppercase mb-2">
+            Gestão Operacional
+          </p>
+          <nav class="space-y-1">
+            <button class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium bg-slate-900 text-white shadow-sm shadow-slate-900/10">
+              <div class="flex items-center gap-3">
+                <i data-lucide="layout-dashboard" class="w-4 h-4 text-white"></i>
+                <span>Painel Geral</span>
+              </div>
+            </button>
+            <button class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition-colors">
+              <div class="flex items-center gap-3">
+                <i data-lucide="shopping-bag" class="w-4 h-4 text-slate-400"></i>
+                <span>Pedidos & Esteira</span>
+              </div>
+              <span id="badgeContadorSidebar" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">4</span>
+            </button>
+            <button class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition-colors">
+              <div class="flex items-center gap-3">
+                <i data-lucide="cake" class="w-4 h-4 text-slate-400"></i>
+                <span>Cardápio & Receitas</span>
+              </div>
+            </button>
+            <button class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition-colors">
+              <div class="flex items-center gap-3">
+                <i data-lucide="calendar-check" class="w-4 h-4 text-slate-400"></i>
+                <span>Agenda de Retirada</span>
+              </div>
+            </button>
+            <button class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition-colors">
+              <div class="flex items-center gap-3">
+                <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
+                <span>Clientes VIP</span>
+              </div>
+            </button>
+            <button class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 transition-colors">
+              <div class="flex items-center gap-3">
+                <i data-lucide="bar-chart-3" class="w-4 h-4 text-slate-400"></i>
+                <span>Relatórios Financeiros</span>
+              </div>
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      <!-- User Footer Profile -->
+      <div class="p-4 border-t border-slate-100">
+        <div class="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-700 shrink-0">
+              AD
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-semibold text-slate-800 truncate">
+                Administração
+              </span>
+              <span class="text-[11px] text-slate-400 truncate">
+                confeitaria@netinha.com
+              </span>
+            </div>
+          </div>
+          <button type="button" class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors" title="Sair do painel">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <div class="flex-1 flex flex-col min-w-0">
+      
+      <!-- TOPBAR -->
+      <header class="h-20 bg-white border-b border-slate-200/80 px-8 flex items-center justify-between sticky top-0 z-30">
+        <div class="flex items-center gap-4 flex-1 max-w-xl">
+          <div class="relative w-full max-w-md">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            <input
+              type="text"
+              id="inputBusca"
+              oninput="aoDigitarBusca(event)"
+              placeholder="Buscar por cliente, código (#DOCE-000) ou item..."
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/70 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition-all"
+            />
+          </div>
+
+          <div class="hidden lg:flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-50 border border-slate-200/70 text-slate-600 text-xs font-medium">
+            <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i>
+            <span id="labelDataHoje">Hoje</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button type="button" class="relative p-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors" title="Notificações">
+            <i data-lucide="bell" class="w-4 h-4"></i>
+            <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white"></span>
+          </button>
+
+          <button type="button" class="p-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors hidden sm:flex items-center gap-2 text-xs font-medium">
+            <i data-lucide="sliders-horizontal" class="w-4 h-4 text-slate-500"></i>
+            <span>Filtros</span>
+          </button>
+
+          <button
+            type="button"
+            onclick="adicionarNovoPedido()"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition-all active:scale-[0.98]"
+          >
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>Novo Pedido</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- DASHBOARD BODY -->
+      <main class="p-8 max-w-7xl w-full mx-auto space-y-8">
+        
+        <!-- Header Info -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 class="text-xl font-bold text-slate-900 tracking-tight">
+              Painel de Operações & Esteira
+            </h1>
+            <p class="text-xs text-slate-500 mt-1">
+              Monitore o fluxo de encomendas, faturamento diário e liberação de insumos.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button
+              type="button"
+              onclick="exportarRelatorio()"
+              class="px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-2 shadow-sm transition-colors"
+            >
+              <i data-lucide="download" class="w-3.5 h-3.5 text-slate-500"></i>
+              <span>Exportar Relatório</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- KPI CARDS ROW -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="kpiContainer">
+          <!-- Renderizado via JS -->
+        </div>
+
+        <!-- KANBAN PIPELINE -->
+        <section class="space-y-4">
+          <div>
+            <h2 class="text-sm font-bold text-slate-900 tracking-tight">
+              Status da Produção
+            </h2>
+            <p class="text-[11px] text-slate-500">
+              Arraste ou avance os pedidos conforme a esteira artesanal progride.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5" id="kanbanContainer">
+            <!-- Colunas Kanban renderizadas via JS -->
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // Estado do App
+    let pedidos = [
+      {
+        id: '#DOCE-4081',
+        clientName: 'Fernanda Lima Alencar',
+        clientPhone: '(11) 98765-4321',
+        items: [
+          { name: 'Bolo Clássico Ninho c/ Morangos (1.5kg)', quantity: 1, price: 120.00 }
+        ],
+        totalAmount: 120.00,
+        depositAmount: 60.00,
+        remainingAmount: 60.00,
+        status: 'Em Produção',
+        pickupDate: '2026-11-10',
+        pickupWindow: 'Manhã (10h - 12h)',
+      },
+      {
+        id: '#DOCE-4082',
+        clientName: 'Beatriz Vasconcelos',
+        clientPhone: '(11) 97123-8899',
+        items: [
+          { name: 'Balas de Coco Recheadas Gourmet (500g)', quantity: 2, price: 55.00 },
+          { name: 'Caixa 50 Brigadeiros Belga Nobre', quantity: 1, price: 75.00 }
+        ],
+        totalAmount: 185.00,
+        depositAmount: 92.50,
+        remainingAmount: 92.50,
+        status: 'Aguardando Sinal',
+        pickupDate: '2026-11-10',
+        pickupWindow: 'Tarde (14h - 16h30)',
+      },
+      {
+        id: '#DOCE-4083',
+        clientName: 'Rodrigo Fontes',
+        clientPhone: '(11) 99442-1100',
+        items: [
+          { name: 'Bolo Red Velvet Nobre (1.5kg)', quantity: 1, price: 140.00 }
+        ],
+        totalAmount: 140.00,
+        depositAmount: 70.00,
+        remainingAmount: 70.00,
+        status: 'Pronto p/ Retirar',
+        pickupDate: '2026-11-09',
+        pickupWindow: 'Fim de Tarde (17h - 19h)',
+      },
+      {
+        id: '#DOCE-4084',
+        clientName: 'Camila Guimarães',
+        clientPhone: '(11) 98112-9090',
+        items: [
+          { name: 'Combo Festa Completa', quantity: 1, price: 170.00 }
+        ],
+        totalAmount: 170.00,
+        depositAmount: 85.00,
+        remainingAmount: 85.00,
+        status: 'Concluído',
+        pickupDate: '2026-11-09',
+        pickupWindow: 'Manhã (10h - 12h)',
+      }
+    ];
+
+    let busca = '';
+
+    const COLUNAS = [
+      { id: 'Aguardando Sinal', label: 'Aguardando Sinal', corBadge: 'border-amber-500/20 bg-amber-50/50 text-amber-800', dot: 'bg-amber-500' },
+      { id: 'Em Produção', label: 'Em Produção', corBadge: 'border-blue-500/20 bg-blue-50/50 text-blue-800', dot: 'bg-blue-600' },
+      { id: 'Pronto p/ Retirar', label: 'Pronto p/ Retirar', corBadge: 'border-emerald-500/20 bg-emerald-50/50 text-emerald-800', dot: 'bg-emerald-600' },
+      { id: 'Concluído', label: 'Concluído', corBadge: 'border-slate-300 bg-slate-100/60 text-slate-700', dot: 'bg-slate-400' },
+    ];
+
+    function formatarMoeda(val) {
+      return `R$ ${val.toFixed(2).replace('.', ',')}`;
+    }
+
+    function renderizarKPIs() {
+      const totalReceita = pedidos.reduce((a, b) => a + b.totalAmount, 0);
+      const totalSinais = pedidos.filter(p => p.status !== 'Aguardando Sinal').reduce((a, b) => a + b.depositAmount, 0);
+      const emProducao = pedidos.filter(p => p.status === 'Em Produção').length;
+      const prontos = pedidos.filter(p => p.status === 'Pronto p/ Retirar').length;
+
+      const container = document.getElementById('kpiContainer');
+      container.innerHTML = `
+        <div class="p-6 bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-semibold text-slate-500 tracking-wide uppercase">Faturamento Previsto</span>
+              <div class="w-9 h-9 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700">
+                <i data-lucide="dollar-sign" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-900 tracking-tight">${formatarMoeda(totalReceita)}</h3>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-slate-500 text-[11px]">Soma dos pedidos ativos</span>
+            <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+              <i data-lucide="arrow-up-right" class="w-3 h-3"></i> +12.4%
+            </span>
+          </div>
+        </div>
+
+        <div class="p-6 bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-semibold text-slate-500 tracking-wide uppercase">Sinais Confirmados (PIX)</span>
+              <div class="w-9 h-9 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700">
+                <i data-lucide="trending-up" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-900 tracking-tight">${formatarMoeda(totalSinais)}</h3>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-slate-500 text-[11px]">50% antecipado em caixa</span>
+            <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+              <i data-lucide="arrow-up-right" class="w-3 h-3"></i> +8.1%
+            </span>
+          </div>
+        </div>
+
+        <div class="p-6 bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-semibold text-slate-500 tracking-wide uppercase">Esteira em Produção</span>
+              <div class="w-9 h-9 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700">
+                <i data-lucide="clock" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <h3 class="text-2xl font-bold text-slate-900 tracking-tight">${emProducao}</h3>
+              <span class="text-[10px] font-bold text-slate-500 uppercase px-1.5 py-0.5 rounded bg-slate-100">Tempo Real</span>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-slate-500 text-[11px]">Bolos & doces na bancada</span>
+          </div>
+        </div>
+
+        <div class="p-6 bg-white rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-semibold text-slate-500 tracking-wide uppercase">Prontos para Retirada</span>
+              <div class="w-9 h-9 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700">
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <h3 class="text-2xl font-bold text-slate-900 tracking-tight">${prontos}</h3>
+              <span class="text-[10px] font-bold text-slate-500 uppercase px-1.5 py-0.5 rounded bg-slate-100">Hoje</span>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-slate-500 text-[11px]">Aguardando comparecimento</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderizarKanban() {
+      const container = document.getElementById('kanbanContainer');
+      const pedidosFiltrados = pedidos.filter(p => {
+        const termo = busca.toLowerCase();
+        return p.clientName.toLowerCase().includes(termo) ||
+               p.id.toLowerCase().includes(termo) ||
+               p.items.some(i => i.name.toLowerCase().includes(termo));
+      });
+
+      container.innerHTML = COLUNAS.map(col => {
+        const pedidosColuna = pedidosFiltrados.filter(p => p.status === col.id);
+
+        return `
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center justify-between px-3 py-2 bg-white rounded-xl border border-slate-200/80 shadow-sm">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full ${col.dot}"></span>
+                <h4 class="text-xs font-bold text-slate-800">${col.label}</h4>
+              </div>
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full border ${col.corBadge}">
+                ${pedidosColuna.length}
+              </span>
+            </div>
+
+            <div class="space-y-3 min-h-[420px] p-2 bg-slate-100/50 rounded-2xl border border-slate-200/50">
+              ${pedidosColuna.length === 0 ? `
+                <div class="h-48 flex flex-col items-center justify-center text-center p-4">
+                  <span class="text-xs font-medium text-slate-400">Nenhum pedido nesta fase</span>
+                </div>
+              ` : pedidosColuna.map(order => `
+                <div class="p-4 bg-white rounded-xl border border-slate-200/80 shadow-sm hover:shadow transition-shadow flex flex-col justify-between gap-3">
+                  <div>
+                    <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+                      <span class="font-mono text-[11px] font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded">${order.id}</span>
+                      <div class="flex items-center gap-1 text-[11px]">
+                        <i data-lucide="clock" class="w-3 h-3 text-slate-400"></i>
+                        <span>${order.pickupWindow.split(' ')[0]}</span>
+                      </div>
+                    </div>
+
+                    <h5 class="text-xs font-bold text-slate-900">${order.clientName}</h5>
+                    <div class="flex items-center gap-1.5 text-[11px] text-slate-500 mt-1">
+                      <i data-lucide="phone" class="w-3 h-3 text-slate-400"></i>
+                      <span>${order.clientPhone}</span>
+                    </div>
+
+                    <div class="mt-3 pt-2.5 border-t border-slate-100 space-y-1">
+                      ${order.items.map(it => `
+                        <div class="flex justify-between text-[11px]">
+                          <span class="text-slate-600 font-medium truncate max-w-[170px]">${it.quantity}x ${it.name}</span>
+                          <span class="text-slate-900 font-semibold font-mono">${formatarMoeda(it.price * it.quantity)}</span>
+                        </div>
+                      `).join('')}
+                    </div>
+                  </div>
+
+                  <div class="pt-2 border-t border-slate-100">
+                    <div class="flex justify-between items-center text-[11px] mb-1.5">
+                      <span class="text-slate-500">Sinal 50%:</span>
+                      <span class="font-bold text-emerald-700">${formatarMoeda(order.depositAmount)}</span>
+                    </div>
+                    <div class="flex justify-between items-center text-[11px] mb-3">
+                      <span class="text-slate-500">Restante na entrega:</span>
+                      <span class="font-bold text-slate-800">${formatarMoeda(order.remainingAmount)}</span>
+                    </div>
+
+                    ${col.id !== 'Concluído' ? `
+                      <button
+                        type="button"
+                        onclick="avancarStatus('${order.id}')"
+                        class="w-full py-2 px-3 rounded-lg bg-slate-50 hover:bg-slate-900 hover:text-white border border-slate-200 text-slate-700 text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                      >
+                        <span>Avançar Fase</span>
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                      </button>
+                    ` : ''}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('badgeContadorSidebar').innerText = pedidos.length;
+      lucide.createIcons();
+    }
+
+    function avancarStatus(orderId) {
+      const pipeline = ['Aguardando Sinal', 'Em Produção', 'Pronto p/ Retirar', 'Concluído'];
+      const pedido = pedidos.find(p => p.id === orderId);
+      if (pedido) {
+        const idx = pipeline.indexOf(pedido.status);
+        if (idx < pipeline.length - 1) {
+          pedido.status = pipeline[idx + 1];
+          renderizarKPIs();
+          renderizarKanban();
+        }
+      }
+    }
+
+    function adicionarNovoPedido() {
+      const novoId = `#DOCE-${Math.floor(1000 + Math.random() * 9000)}`;
+      pedidos.unshift({
+        id: novoId,
+        clientName: 'Cliente Balcão VIP',
+        clientPhone: '(11) 98888-2233',
+        items: [{ name: 'Bolo Clássico Ninho c/ Morangos (1.5kg)', quantity: 1, price: 120.00 }],
+        totalAmount: 120.00,
+        depositAmount: 60.00,
+        remainingAmount: 60.00,
+        status: 'Aguardando Sinal',
+        pickupDate: '2026-11-10',
+        pickupWindow: 'Tarde (14h - 16h30)'
+      });
+      renderizarKPIs();
+      renderizarKanban();
+    }
+
+    function aoDigitarBusca(e) {
+      busca = e.target.value;
+      renderizarKanban();
+    }
+
+    function exportarRelatorio() {
+      alert(`Relatório gerado com sucesso!\nTotal de pedidos: ${pedidos.length}\nFaturamento Total: ${formatarMoeda(pedidos.reduce((a,b)=>a+b.totalAmount,0))}`);
+    }
+
+    // Inicialização
+    const formatadorData = new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' });
+    const dataTxt = formatadorData.format(new Date());
+    document.getElementById('labelDataHoje').innerText = dataTxt.charAt(0).toUpperCase() + dataTxt.slice(1);
+
+    renderizarKPIs();
+    renderizarKanban();
+  </script>
+</body>
+</html>

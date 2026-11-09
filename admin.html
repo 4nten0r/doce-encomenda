@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netinha Gourmet - Painel da Confeiteira (Admin)</title>
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <!-- Aplica o tema salvo antes da primeira pintura (padrão: light artesanal Netinha Gourmet) -->
+  <script>
+    document.documentElement.dataset.theme = localStorage.getItem('doce_encomenda_tema') === 'dark' ? 'dark' : 'light';
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      color-scheme: light;
+      --color-background: #FFF7F1;
+      --color-surface: #FFFFFF;
+      --color-surface-subtle: #FDF4ED;
+      --color-surface-elevated: #FFFFFF;
+      --color-primary: #C84328;
+      --color-primary-hover: #AE351F;
+      --color-text: #452416;
+      --color-muted: #9A6E5D;
+      --color-border: #EBD5C4;
+      --color-highlight: #FFF2C5;
+      --color-highlight-text: #854D0E;
+      --color-success: #16A34A;
+      --color-success-bg: #DCFCE7;
+      
+      --primary: #C84328;
+      --accent: #E25A3C;
+      --bg-off: #FFF7F1;
+      --card-bg: #FFFFFF;
+      --ok: #16A34A;
+      --bad: #DC2626;
+      --ink-soft: #9A6E5D;
+      --line: #EBD5C4;
+      --clay-shadow: 7px 7px 18px rgba(116, 72, 49, 0.12), -7px -7px 18px rgba(255, 255, 255, 0.88);
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --color-background: #18100C;
+      --color-surface: #241712;
+      --color-surface-subtle: #2F1E18;
+      --color-surface-elevated: #3A261E;
+      --color-primary: #E25A3C;
+      --color-primary-hover: #F06E52;
+      --color-text: #FFF5EE;
+      --color-muted: #D3B7A8;
+      --color-border: #4D3328;
+      --color-highlight: #4A3512;
+      --color-highlight-text: #FEF08A;
+      --color-success: #22C55E;
+      --color-success-bg: rgba(34, 197, 94, 0.16);
+
+      --primary: #E25A3C;
+      --accent: #F06E52;
+      --bg-off: #18100C;
+      --card-bg: #241712;
+      --ok: #22C55E;
+      --bad: #EF4444;
+      --ink-soft: #D3B7A8;
+      --line: #4D3328;
+      --clay-shadow: 7px 7px 18px rgba(0, 0, 0, 0.34), -7px -7px 18px rgba(91, 60, 45, 0.18);
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-off);
+      background-image:
+        radial-gradient(circle at 10% 0%, rgba(200, 67, 40, 0.05), transparent 30rem),
+        radial-gradient(circle at 90% 10%, rgba(235, 213, 196, 0.25), transparent 28rem),
+        linear-gradient(180deg, var(--bg-off) 0%, var(--color-surface-subtle) 100%);
+      color: var(--color-text);
+      -webkit-tap-highlight-color: transparent;
+      transition: background-color 0.35s ease, color 0.35s ease;
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .glass-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      box-shadow: var(--clay-shadow);
+      transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.2s ease, box-shadow 0.28s ease, background-color 0.35s ease;
+    }
+
+    :root[data-theme="dark"] .glass-panel {
+      box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+    }
+
+    .glass-input {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      color: var(--color-text);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .glass-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(200, 67, 40, 0.16);
+      outline: none;
+    }
+
+    header.glass-panel {
+      background: var(--card-bg);
+      border-color: var(--line);
+    }
+
+    .card-touch {
+      transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.22s ease, background-color 0.22s ease;
+    }
+    .card-touch:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -12px rgba(69, 36, 22, 0.35);
+    }
+    .card-touch:active {
+      transform: scale(0.98);
+    }
+
+    .interactive-card, .interactive-control {
+      transition: translate 0.24s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.24s ease, box-shadow 0.24s ease, background-color 0.24s ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .interactive-card:hover {
+        translate: 0 -3px;
+        border-color: var(--primary);
+        box-shadow: 0 14px 28px -14px rgba(69, 36, 22, 0.4), var(--clay-shadow);
+      }
+
+      .interactive-control:hover {
+        transform: translateY(-2px);
+      }
+    }
+
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    main {
+      animation: admin-enter 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    #gridKanban > div {
+      min-width: 0;
+    }
+
+    @keyframes admin-enter {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 767px) {
+      body { padding-bottom: 1.5rem; }
+      header.glass-panel { padding: 0.8rem 1rem; }
+      header.glass-panel { flex-wrap: wrap; gap: 0.75rem; }
+      .admin-brand-group { flex: 1 1 100%; }
+      .admin-brand-lockup { width: min(62vw, 14rem); }
+      .admin-header-actions { width: 100%; justify-content: flex-end; flex-wrap: wrap; }
+      header button { min-height: 2.75rem; }
+      main { padding: 1rem; gap: 1.25rem; }
+      main > section:first-child { gap: 0.55rem; }
+      main > section:first-child > div { padding: 0.85rem; border-radius: 1.1rem; }
+      main > section:first-child > div:nth-child(2) { grid-column: span 2; }
+      main > section:nth-child(2) { padding: 0.85rem; }
+      #gridKanban {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 0.75rem;
+        padding: 0.15rem 0.1rem 0.6rem;
+        scrollbar-width: none;
+      }
+      #gridKanban::-webkit-scrollbar { display: none; }
+      #gridKanban > div {
+        flex: 0 0 min(84vw, 20rem);
+        min-height: 26rem;
+        scroll-snap-align: start;
+      }
+    }
+
+    .theme-toggle {
+      width: 2.4rem;
+      height: 2.4rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: 0.85rem;
+      font-size: 1rem;
+      color: var(--primary);
+      background: var(--card-bg);
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease, background-color 0.25s ease, border-color 0.25s ease;
+    }
+    .theme-toggle:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px) rotate(8deg);
+    }
+    .theme-toggle:active {
+      transform: scale(0.92);
+    }
+    #themeIconAdmin svg { width: 100%; height: 100%; }
+
+    /* Adaptação de utilitários Tailwind para tema claro/escuro consistente */
+    :root:not([data-theme="dark"]) .text-white { color: var(--color-text) !important; }
+    :root:not([data-theme="dark"]) .text-slate-200 { color: #5C3A2E !important; }
+    :root:not([data-theme="dark"]) .text-slate-300 { color: #6E493A !important; }
+    :root:not([data-theme="dark"]) .text-slate-400 { color: #9A6E5D !important; }
+    :root:not([data-theme="dark"]) .text-slate-500 { color: #B38E7E !important; }
+    :root:not([data-theme="dark"]) .bg-slate-900 { background-color: #FFFFFF !important; color: var(--color-text) !important; }
+    :root:not([data-theme="dark"]) .bg-slate-800 { background-color: var(--color-surface-subtle) !important; color: var(--color-text) !important; }
+    :root:not([data-theme="dark"]) .bg-slate-900\/60,
+    :root:not([data-theme="dark"]) .bg-slate-900\/80,
+    :root:not([data-theme="dark"]) .bg-slate-900\/90 { background-color: #FFFFFF !important; }
+    :root:not([data-theme="dark"]) .bg-black\/15 { background-color: var(--color-surface-subtle) !important; }
+    :root:not([data-theme="dark"]) .border-white\/5,
+    :root:not([data-theme="dark"]) .border-white\/10 { border-color: var(--color-border) !important; }
+
+    :root[data-theme="dark"] .text-white { color: var(--color-text) !important; }
+    :root[data-theme="dark"] .bg-slate-900 { background-color: var(--card-bg) !important; color: var(--color-text) !important; }
+    :root[data-theme="dark"] .bg-slate-800 { background-color: var(--color-surface-subtle) !important; color: var(--color-text) !important; }
+    :root[data-theme="dark"] .border-white\/5,
+    :root[data-theme="dark"] .border-white\/10 { border-color: var(--line) !important; }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col antialiased selection:bg-[#C84328] selection:text-white">
+
+  <!-- BARRA SUPERIOR (HEADER ADMIN) -->
+  <header class="glass-panel sticky top-0 z-40 border-b border-brand-border px-4 lg:px-8 py-3.5 flex items-center justify-between">
+    <div class="admin-brand-group flex items-center gap-3">
+      <a href="index.html" class="interactive-control block shrink-0" aria-label="Voltar ao portal Netinha Gourmet">
+        <img src="logo.png" alt="Netinha Gourmet — Feito com muito carinho" class="admin-brand-lockup w-60 h-16 object-contain rounded-lg">
+      </a>
+      <div class="min-w-0">
+        <span class="inline-block px-2 py-0.5 rounded-full bg-[#C84328]/15 text-[#C84328] text-[9px] font-bold border border-[#C84328]/30">PAINEL DA CONFEITEIRA</span>
+        <p class="text-[10px] text-brand-muted mt-1">Controle de Produção & Caixa</p>
+      </div>
+    </div>
+
+    <div class="admin-header-actions flex items-center gap-2">
+      <button id="themeToggle" type="button" class="theme-toggle interactive-control" onclick="alternarTemaAdmin()" aria-label="Alternar tema" title="Alternar tema">
+        <span id="themeIconAdmin" aria-hidden="true" class="w-5 h-5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M20.2 15.3A8.5 8.5 0 0 1 8.7 3.8 8.5 8.5 0 1 0 20.2 15.3Z"/></svg>
+        </span>
+      </button>
+      <button onclick="abrirModalCatalogo()" class="px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-700 dark:text-emerald-300 text-xs font-bold border border-emerald-500/30 card-touch flex items-center gap-1">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 13h16l-2 7H6l-2-7Zm1 0V9a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M9 7V4m6 3V4"/></svg>
+        Cardápio & Receitas
+      </button>
+      <button onclick="abrirModalCompras()" class="px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-800 dark:text-amber-300 text-xs font-bold border border-amber-500/30 card-touch flex items-center gap-1">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h2l2.2 11.2A2 2 0 0 0 9.2 17h8.9a2 2 0 0 0 1.9-1.4L22 8H6"/><circle cx="10" cy="21" r="1"/><circle cx="18" cy="21" r="1"/></svg>
+        Lista de Compras (JIT)
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-8 space-y-6">
+
+    <!-- MÉTRICAS DO DIA -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
+      <div class="glass-panel interactive-card p-4 rounded-2xl border border-white/5">
+        <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Retiradas Hoje</span>
+        <div class="flex items-baseline gap-2 mt-1">
+          <span id="metricaRetiradas" class="text-2xl font-extrabold text-white">0</span>
+          <span class="text-xs text-slate-400">pedidos</span>
+        </div>
+      </div>
+
+      <div class="glass-panel interactive-card p-4 rounded-2xl border border-white/5">
+        <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Caixa Previsto (Saldos)</span>
+        <div class="flex items-baseline gap-2 mt-1">
+          <span id="metricaCaixa" class="text-2xl font-extrabold text-[--ok]">R$ 0,00</span>
+        </div>
+      </div>
+
+      <div class="glass-panel interactive-card p-4 rounded-2xl border border-white/5">
+        <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Em Produção</span>
+        <div class="flex items-baseline gap-2 mt-1">
+          <span id="metricaProducao" class="text-2xl font-extrabold text-[#C84328]">0</span>
+          <span class="text-xs text-slate-400">bolos</span>
+        </div>
+      </div>
+
+      <div class="glass-panel interactive-card p-4 rounded-2xl border border-white/5">
+        <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Próxima Retirada</span>
+        <div class="truncate mt-1">
+          <span id="metricaProximo" class="text-sm font-bold text-slate-200">Nenhum</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILTROS & AÇÕES -->
+    <section class="glass-panel p-4 rounded-2xl border border-white/5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <input type="date" id="filtroDataAdmin" onchange="carregarPedidosAdmin()" class="glass-input p-2.5 rounded-xl text-xs font-semibold outline-none cursor-pointer">
+        <button onclick="definirDataHoje()" class="px-3 py-2 rounded-xl bg-[#C84328]/15 text-[#C84328] hover:bg-[#C84328]/25 text-xs font-bold border border-[#C84328]/30 card-touch">Hoje</button>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="abrirModalBalcao()" class="px-4 py-2.5 rounded-xl bg-[#C84328] hover:bg-[#AE351F] text-white font-extrabold text-xs shadow-md card-touch flex items-center gap-1.5">
+          <span>+</span> Novo Pedido Balcão
+        </button>
+      </div>
+    </section>
+
+    <!-- ESTEIRA DE PRODUÇÃO (KANBAN) -->
+    <section class="space-y-3">
+      <h2 class="text-xs font-bold text-[#C84328] uppercase tracking-wider">Esteira de Produção & Pedidos</h2>
+      
+      <div id="gridKanban" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- Colunas geradas dinamicamente via admin.js -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: LISTA DE COMPRAS JIT -->
+  <div id="modalCompras" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div class="glass-panel p-6 rounded-3xl max-w-md w-full border border-white/10 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-2 border-b border-white/10">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <svg class="w-5 h-5 text-brand-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h2l2.2 11.2A2 2 0 0 0 9.2 17h8.9a2 2 0 0 0 1.9-1.4L22 8H6"/><circle cx="10" cy="21" r="1"/><circle cx="18" cy="21" r="1"/></svg>
+          Lista de Compras (Próximos 7 Dias)
+        </h3>
+        <button onclick="fecharModalCompras()" class="interactive-control text-slate-400 hover:text-white p-1" title="Fechar" aria-label="Fechar">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <div id="listaIngredientesJIT" class="space-y-2 text-xs text-slate-300 max-h-60 overflow-y-auto no-scrollbar">
+        <!-- Itens calculados dinamicamente -->
+      </div>
+
+      <button onclick="fecharModalCompras()" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-xs card-touch">
+        Fechar
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: CARDAPIO E RECEITAS -->
+  <div id="modalCatalogo" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div class="glass-panel p-5 sm:p-6 rounded-3xl max-w-3xl w-full border border-white/10 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto no-scrollbar">
+      <div class="flex items-start justify-between gap-3 pb-3 border-b border-white/10">
+        <div>
+          <span class="text-[10px] uppercase tracking-widest font-bold text-emerald-300">Conteúdo do portal</span>
+          <h3 class="text-lg font-bold text-white mt-1">Cardápio & Receitas</h3>
+          <p class="text-xs text-slate-400 mt-1">Altere os produtos publicados e os ingredientes usados pela lista de compras.</p>
+        </div>
+        <button onclick="fecharModalCatalogo()" class="interactive-control text-slate-400 hover:text-white p-1 text-lg" title="Fechar" aria-label="Fechar">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-4">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs uppercase tracking-wider font-bold text-[#C84328]">Produtos cadastrados</h4>
+            <button onclick="novoProdutoCatalogo()" class="px-2.5 py-1.5 rounded-lg bg-[#C84328]/15 text-[#C84328] border border-[#C84328]/30 text-[10px] font-bold">+ Novo</button>
+          </div>
+          <div id="listaCatalogoAdmin" class="space-y-2"></div>
+        </div>
+
+        <form id="formCatalogo" onsubmit="salvarProdutoCatalogo(event)" class="space-y-3 p-3.5 rounded-2xl bg-black/15 border border-white/10">
+          <input type="hidden" id="catalogoId">
+          <div class="flex items-center justify-between">
+            <h4 id="tituloFormCatalogo" class="text-xs uppercase tracking-wider font-bold text-emerald-300">Novo produto</h4>
+            <button type="button" onclick="limparFormCatalogo()" class="text-[10px] text-slate-400 hover:text-white">Limpar</button>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-semibold text-slate-300 mb-1">Nome do produto</label>
+            <input id="catalogoNome" required class="w-full glass-input p-2.5 rounded-xl text-xs outline-none" placeholder="Ex: Bolo de Limão">
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-300 mb-1">Categoria</label>
+              <select id="catalogoCategoria" class="w-full glass-input p-2.5 rounded-xl text-xs outline-none bg-slate-900 text-white">
+                <option value="bolos">Bolos</option>
+                <option value="doces">Brigadeiros</option>
+                <option value="combos">Combos</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-300 mb-1">Preço (R$)</label>
+              <input id="catalogoPreco" required type="number" min="0" step="0.01" class="w-full glass-input p-2.5 rounded-xl text-xs outline-none" placeholder="120,00">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-semibold text-slate-300 mb-1">Selo e rendimento</label>
+            <div class="grid grid-cols-2 gap-2">
+              <input id="catalogoBadge" class="glass-input p-2.5 rounded-xl text-xs outline-none" placeholder="Mais pedido">
+              <input id="catalogoRendimento" class="glass-input p-2.5 rounded-xl text-xs outline-none" placeholder="Serve 10 pessoas">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-semibold text-slate-300 mb-1">Descrição</label>
+            <textarea id="catalogoDescricao" required rows="2" class="w-full glass-input p-2.5 rounded-xl text-xs outline-none resize-none" placeholder="Descreva o produto para o cliente"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-semibold text-slate-300 mb-1">Receita / ingredientes</label>
+            <p class="text-[10px] text-slate-500 mb-1">Uma linha por ingrediente: <strong>nome | quantidade | unidade</strong></p>
+            <textarea id="catalogoReceita" rows="5" class="w-full glass-input p-2.5 rounded-xl text-xs outline-none resize-y" placeholder="Leite Condensado | 3 | latas&#10;Ovos | 4 | unidades"></textarea>
+          </div>
+
+          <div class="flex gap-2 pt-1">
+            <button type="submit" class="flex-1 py-2.5 rounded-xl bg-[#C84328] hover:bg-[#AE351F] text-white font-extrabold text-xs card-touch">Salvar no cardápio</button>
+            <button type="button" id="btnExcluirCatalogo" onclick="excluirProdutoCatalogo()" class="hidden px-3 py-2.5 rounded-xl bg-rose-500/15 text-rose-200 border border-rose-400/25 text-xs font-bold">Excluir</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVO PEDIDO BALCÃO -->
+  <div id="modalBalcao" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div class="glass-panel p-6 rounded-3xl max-w-md w-full border border-white/10 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-2 border-b border-white/10">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>
+          Novo Pedido Manual (Balcão/Zap)
+        </h3>
+        <button onclick="fecharModalBalcao()" class="interactive-control text-slate-400 hover:text-white p-1" title="Fechar" aria-label="Fechar">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <form id="formBalcao" onsubmit="salvarPedidoBalcao(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Nome do Cliente</label>
+          <input type="text" id="bNome" required placeholder="Ex: Ana Souza" class="w-full glass-input p-3 rounded-xl text-xs outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">WhatsApp</label>
+          <input type="tel" id="bFone" required placeholder="(11) 99999-9999" class="w-full glass-input p-3 rounded-xl text-xs outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Produto</label>
+          <select id="bProduto" class="w-full glass-input p-3 rounded-xl text-xs outline-none bg-slate-900 text-white">
+            <option value="Bolo Clássico 1.5kg">Bolo Clássico 1.5kg (R$ 120,00)</option>
+            <option value="Bolo Red Velvet">Bolo Red Velvet (R$ 140,00)</option>
+            <option value="Cento de Brigadeiros Tradicionais">Cento de Brigadeiros (R$ 90,00)</option>
+            <option value="Combo Festa">Combo Festa (R$ 170,00)</option>
+          </select>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Data de Retirada</label>
+            <input type="date" id="bData" required class="w-full glass-input p-3 rounded-xl text-xs outline-none cursor-pointer">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Janela</label>
+            <select id="bJanela" class="w-full glass-input p-3 rounded-xl text-xs outline-none bg-slate-900 text-white">
+              <option value="Manhã (09h - 12h)">Manhã (09h - 12h)</option>
+              <option value="Tarde (14h - 17h)">Tarde (14h - 17h)</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-[#C84328] hover:bg-[#AE351F] text-white font-extrabold rounded-xl text-xs shadow-md card-touch mt-2">
+          Salvar Pedido na Esteira
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="catalogo.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
