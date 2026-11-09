@@ -573,8 +573,11 @@
         </div>
       </div>
 
-      <!-- AÇÕES DO HEADER: TEMA + CARRINHO (alinhados) -->
+      <!-- AÇÕES DO HEADER: ADMIN + TEMA + CARRINHO -->
       <div class="flex items-center gap-2">
+        <a href="admin.html" class="p-2.5 rounded-2xl bg-brand-surfaceSubtle hover:bg-brand-surface border border-brand-border text-brand-muted hover:text-brand-text transition-all btn-touch neu-btn flex items-center justify-center" title="Painel da Confeiteira (Admin)" aria-label="Painel da Confeiteira">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </a>
         <button id="themeToggle" type="button" class="theme-toggle neu-toggle interactive-control" onclick="alternarTema()" aria-label="Alternar tema" title="Alternar tema">
           <span id="themeIcon" aria-hidden="true" class="w-5 h-5">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M20.2 15.3A8.5 8.5 0 0 1 8.7 3.8 8.5 8.5 0 1 0 20.2 15.3Z"/></svg>
@@ -974,8 +977,10 @@
   </main>
 
   <!-- RODAPÉ DE REQUINTE -->
-  <footer class="mt-4 text-center text-xs text-brand-muted flex items-center justify-center gap-2">
-    <span>Netinha Gourmet &bull; Feito com muito carinho &bull; Bolos, doces e balas de coco</span>
+  <footer class="mt-4 text-center text-xs text-brand-muted flex flex-wrap items-center justify-center gap-2">
+    <span>Netinha Gourmet &bull; Feito com muito carinho</span>
+    <span>&bull;</span>
+    <a href="admin.html" class="underline hover:text-brand-primary transition-colors font-semibold">Painel da Confeiteira</a>
   </footer>
 
   <script src="catalogo.js"></script>
